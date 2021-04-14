@@ -18,10 +18,6 @@ class Role extends Model
         'name',
     ];
 
-    public function rights()
-    {
-        return $this->belongsToMany(Right::class, 'roles_rights', 'rights_id', 'roles_id');
-    }
 
     public function clubMembers()
     {
