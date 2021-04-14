@@ -5,6 +5,7 @@ use App\Http\Controllers\ClubController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ClubMemberController;
+use App\Http\Controllers\ReportController;
 use App\Models\Club;
 
 
@@ -37,6 +38,9 @@ Route::get('/index', [App\Http\Controllers\ClubController::class, 'frontPage'])-
 Route::get('/{club}', [App\Http\Controllers\ClubController::class, 'mainPage'])->middleware(['auth', 'club.access'])->name('clubMainPage');
 
 Route::post('/{club}', [App\Http\Controllers\FileController::class, 'store'])->middleware(['auth', 'club.access'])->name('clubMainPageFile.store');
+
+Route::get('/{club}/editReport', [App\Http\Controllers\ReportController::class, 'edit'])->middleware(['auth'])->name('clubEditReport.edit');
+Route::post('/{club}/editReport', [App\Http\Controllers\ReportController::class, 'store'])->middleware(['auth'])->name('clubEditReport.store');
 //
 Route::get('/{club}/members', [App\Http\Controllers\ClubMemberController::class, 'index2'])->middleware(['auth'])->name('clubMembers.index2');
 Route::patch('/{club}/members/{clubMember}', [App\Http\Controllers\ClubMemberController::class, 'update2'])->middleware(['auth'])->name('clubMembers.update2');
