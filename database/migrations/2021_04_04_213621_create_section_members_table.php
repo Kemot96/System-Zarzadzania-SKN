@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMembersClubsTable extends Migration
+class CreateSectionMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateMembersClubsTable extends Migration
      */
     public function up()
     {
-        Schema::create('members_clubs', function (Blueprint $table) {
+        Schema::create('section_members', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users');
-            $table->unsignedBigInteger('roles_id');
-            $table->foreign('roles_id')->references('id')->on('roles');
-            $table->unsignedBigInteger('clubs_id');
-            $table->foreign('clubs_id')->references('id')->on('clubs');
+            $table->unsignedBigInteger('sections_id');
+            $table->foreign('sections_id')->references('id')->on('sections');
             $table->unsignedBigInteger('academic_years_id');
             $table->foreign('academic_years_id')->references('id')->on('academic_years');
             $table->timestamps();
@@ -34,6 +32,6 @@ class CreateMembersClubsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('members_clubs');
+        Schema::dropIfExists('section_members');
     }
 }

@@ -22,7 +22,7 @@ class ClubMemberSeeder extends Seeder
             $random_academic_years_id = DB::table('academic_years') -> inRandomOrder() -> value('id');
 
 
-            DB::table('members_clubs')->insert([
+            DB::table('club_members')->insert([
                 ['users_id' => $random_users_id, 'roles_id' => $random_roles_id, 'clubs_id' => $random_clubs_id, 'academic_years_id' => $random_academic_years_id, 'created_at' => now(), 'updated_at' => now()],
             ]);
         }

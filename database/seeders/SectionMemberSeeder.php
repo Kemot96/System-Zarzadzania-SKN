@@ -21,7 +21,7 @@ class SectionMemberSeeder extends Seeder
             $random_academic_years_id = DB::table('academic_years') -> inRandomOrder() -> value('id');
 
 
-            DB::table('members_sections')->insert([
+            DB::table('section_members')->insert([
                 ['users_id' => $random_users_id, 'sections_id' => $random_sections_id, 'academic_years_id' => $random_academic_years_id, 'created_at' => now(), 'updated_at' => now()],
             ]);
         }

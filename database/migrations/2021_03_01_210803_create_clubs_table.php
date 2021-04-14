@@ -17,7 +17,7 @@ class CreateClubsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->text('description')->nullable();
-            $table->string('icon');
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

@@ -16,6 +16,7 @@ class CreateAcademicYearsTable extends Migration
         Schema::create('academic_years', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->boolean('current_year');
             $table->timestamps();
         });
     }
