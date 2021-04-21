@@ -7,6 +7,7 @@ use App\Models\Report;
 use App\Models\Club;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Dompdf\Dompdf;
 
 class ReportController extends Controller
 {
@@ -25,9 +26,9 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Club $club)
     {
-        //
+        return view('createReport', compact('club'));
     }
 
     /**
@@ -69,9 +70,9 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function edit(Report $report, Club $club)
+    public function edit(Club $club, Report $report)
     {
-        return view('editReport', compact('report', 'club'));
+        return view('editReport', compact('club', 'report'));
     }
 
     /**
@@ -81,9 +82,9 @@ class ReportController extends Controller
      * @param  \App\Models\Report  $report
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Report $report, Club $club)
+    public function update(Request $request, Club $club, Report $report)
     {
-        $current_academic_year_id = AcademicYear::latest()->where('current_year', '1')->first()->id;
+        $current_academic_year_id = getCurrentAcademicYear();
 
         $report->update(array(
             'users_id' => Auth::user() -> id,
@@ -106,5 +107,22 @@ class ReportController extends Controller
     public function destroy(Report $report)
     {
         //
+    }
+
+    public function generate($club, $report)
+    {
+        // use the dompdf class
+        $content = view('templates.report') -> render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($content);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser
+        $dompdf->stream();
     }
 }

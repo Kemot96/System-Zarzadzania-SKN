@@ -2,10 +2,11 @@
 @if($club->getLoggedUserRoleName() == 'opiekun_koła')
     <a href="{{route('clubMembers.index2', ['club' => $club])}}">Lista członków koła</a>
 @endif
-@if($club->getLoggedUserRoleName() == 'członek_koła' || 'przewodniczący_koła')
-
-    <br><a href="{{ route('clubEditReport.edit',$club->id)}}" class="btn btn-primary">Edytuj sprawozdanie</a>
-
+@if($report != NULL)
+    <br><a href="{{ route('clubReport.edit',[$club->id, $report->id])}}" class="btn btn-primary">Edytuj sprawozdanie</a>
+@else
+    <br><a href="{{ route('clubReport.create',$club->id)}}" class="btn btn-primary">Dodaj sprawozdanie</a>
+@endif
     <div class="card-body">
         <form method="POST" action="{{ route('clubMainPageFile.store', $club) }}" enctype="multipart/form-data">
             @csrf
@@ -32,7 +33,7 @@
             </div>
         </form>
     </div>
-@endif
+
 @foreach($files as $file)
     {{$file->name}}<br>
 @endforeach

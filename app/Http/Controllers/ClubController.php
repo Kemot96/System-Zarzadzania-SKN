@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AcademicYear;
 use App\Models\Club;
 use App\Models\ClubMember;
+use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -141,7 +142,15 @@ class ClubController extends Controller
     {
         $files = $club->files;
 
-        return view('club', compact('club', 'files'));
+        $current_academic_year_id = getCurrentAcademicYear();
+
+        $report = NULL;
+
+        if (Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->exists()) {
+            $report = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->first();
+        }
+
+        return view('club', compact('club', 'files', 'report'));
     }
 
 
