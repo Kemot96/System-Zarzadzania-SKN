@@ -142,7 +142,7 @@ class ClubController extends Controller
     {
         $files = $club->files;
 
-        $current_academic_year_id = getCurrentAcademicYear();
+        $current_academic_year_id = getCurrentAcademicYear()->id;
 
         $report = NULL;
 

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\AcademicYear;
+use App\Models\ClubMember;
 use App\Models\Report;
 use App\Models\Club;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
@@ -84,7 +87,7 @@ class ReportController extends Controller
      */
     public function update(Request $request, Club $club, Report $report)
     {
-        $current_academic_year_id = getCurrentAcademicYear();
+        $current_academic_year_id = getCurrentAcademicYear()->id;
 
         $report->update(array(
             'users_id' => Auth::user() -> id,
@@ -111,8 +114,26 @@ class ReportController extends Controller
 
     public function generate($club, $report)
     {
+        $report_description = Report::where('id', $report)->first()->description;
+
+        $club_name = Club::latest()->where('id', $club)->first()->name;
+        $description = Club::latest()->where('id', $club)->first()->description;
+        $current_academic_year = getCurrentAcademicYear()->name;
+
+        $member_role_id = Role::where('name', 'członek_koła')->first()->id;
+        $supervisor_role_id = Role::where('name', 'opiekun_koła')->first()->id;
+        $chairman_role_id = Role::where('name', 'przewodniczący_koła')->first()->id;
+
+        $supervisor_id = ClubMember::where('clubs_id', $club) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $supervisor_role_id)->first()->users_id;
+        $chairman_id = ClubMember::where('clubs_id', $club) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $chairman_role_id)->first()->users_id;
+
+        $supervisor_name = User::where('id', $supervisor_id)->first()->name;
+        $chairman_name = User::where('id', $chairman_id)->first()->name;
+
+        $club_members = ClubMember::latest()->where('clubs_id', $club)->where('academic_years_id', getCurrentAcademicYear()->id)->where('roles_id', $member_role_id)->get();
+
         // use the dompdf class
-        $content = view('templates.report') -> render();
+        $content = view('templates.report', compact('club_name', 'description', 'current_academic_year', 'club_members', 'supervisor_name', 'chairman_name', 'report_description')) -> render();
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($content);
