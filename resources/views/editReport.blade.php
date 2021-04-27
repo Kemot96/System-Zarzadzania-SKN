@@ -49,6 +49,11 @@
                     </form>
 
                     <br><a href="{{ route('clubReport.generate', [$club, $report])}}" class="btn btn-primary">Wygeneruj sprawozdanie</a>
+
+                    <div class="mb-3">
+                        <label for="formFileMultiple" class="form-label">Prześlij sprawozdanie</label>
+                        <input class="form-control" type="file" id="formFileMultiple" multiple>
+                    </div>
                 </div>
             </div>
         </div>
