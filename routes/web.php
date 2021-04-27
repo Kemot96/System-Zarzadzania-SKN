@@ -20,20 +20,19 @@ use App\Models\Club;
 |
 */
 Auth::routes();
-Route::resource('users', UserController::class);
-Route::resource('clubs', ClubController::class);
-Route::resource('sections', SectionController::class);
-Route::resource('clubMembers', ClubMemberController::class);
 
-Route::get('/', function () {
-    return view('welcome');
+Route::prefix('admin')->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('clubs', ClubController::class);
+    Route::resource('sections', SectionController::class);
+    Route::resource('clubMembers', ClubMemberController::class);
 });
+
+Route::get('/', [App\Http\Controllers\ClubController::class, 'frontPage'])->name('index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
-
-Route::get('/index', [App\Http\Controllers\ClubController::class, 'frontPage'])->name('index');
 
 Route::get('/{club}', [App\Http\Controllers\ClubController::class, 'mainPage'])->middleware(['auth', 'club.access'])->name('clubMainPage');
 
@@ -50,8 +49,7 @@ Route::patch('/{club}/members/{clubMember}', [App\Http\Controllers\ClubMemberCon
 Route::delete('/{club}/members/{clubMember}', [App\Http\Controllers\ClubMemberController::class, 'destroy2'])->middleware(['auth'])->name('clubMembers.destroy2');
 //
 Route::get('/{club}/join', [App\Http\Controllers\ClubMemberController::class, 'joinPage'])->name('joinClub');
-
-Route::get('/{club}/join/send', [App\Http\Controllers\ClubMemberController::class, 'join'])->name('join');
+Route::post('/{club}/join', [App\Http\Controllers\ClubMemberController::class, 'join'])->name('join');
 
 require __DIR__.'/auth.php';
 

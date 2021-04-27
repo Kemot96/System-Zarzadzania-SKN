@@ -65,7 +65,7 @@ class ClubMemberController extends Controller
             'academic_years_id' => $request['academic_years_id'],
         ]);
 
-        return redirect('/clubMembers');
+        return redirect('/admin/clubMembers');
     }
 
     /**
@@ -112,7 +112,7 @@ class ClubMemberController extends Controller
             'academic_years_id' => $request['academic_years_id'],
         ));
 
-        return redirect('/clubMembers');
+        return redirect('/admin/clubMembers');
     }
 
     public function update2($club, ClubMember $clubMember)
@@ -138,7 +138,7 @@ class ClubMemberController extends Controller
     {
         $clubMember->delete();
 
-        return redirect('/clubMembers');
+        return redirect('/admin/clubMembers');
     }
 
     public function destroy2($club, ClubMember $clubMember)
@@ -150,7 +150,14 @@ class ClubMemberController extends Controller
 
     public function joinPage(Club $club)
     {
-        return view('joinClub', compact('club'));
+        $request_to_join_send = false;
+
+        if(ClubMember::where('users_id', Auth::user()->id) -> where('clubs_id', $club->id) -> where('academic_years_id', getCurrentAcademicYear()->id)->exists())
+        {
+            $request_to_join_send = true;
+        }
+
+        return view('joinClub', compact('club', 'request_to_join_send'));
     }
 
 
@@ -159,9 +166,9 @@ class ClubMemberController extends Controller
         $user_id = Auth::user()->id;
         $club_id = $request->club;
         $role_id = Role::latest()->find(1)->where('name', 'nieaktywny')->first()->id;
-        $current_academic_year_id = AcademicYear::latest()->where('current_year', '1')->first()->id;
+        $current_academic_year_id = getCurrentAcademicYear()->id;
 
-        //$this->validateStoreClubMember();
+        //$this->validateJoinClubMember();
 
         ClubMember::create([
             'users_id' => $user_id,
@@ -170,7 +177,7 @@ class ClubMemberController extends Controller
             'academic_years_id' => $current_academic_year_id,
         ]);
 
-        return redirect('/index');
+        return back();
     }
 
     protected function validateStoreClubMember()

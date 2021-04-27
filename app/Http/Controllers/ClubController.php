@@ -58,7 +58,7 @@ class ClubController extends Controller
             'icon' => $path,
         ]);
 
-        return redirect('/clubs');
+        return redirect('/admin/clubs');
     }
 
     /**
@@ -113,7 +113,7 @@ class ClubController extends Controller
             ));
         }
 
-        return redirect('/clubs');
+        return redirect('/admin/clubs');
     }
 
     /**
@@ -128,7 +128,7 @@ class ClubController extends Controller
 
         $club->delete();
 
-        return redirect('/clubs');
+        return redirect('/admin/clubs');
     }
 
     public function frontPage()

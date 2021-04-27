@@ -48,7 +48,7 @@ class SectionController extends Controller
             'clubs_id' => $request['clubs_id'],
         ]);
 
-        return redirect('/sections');
+        return redirect('/admin/sections');
     }
 
     /**
@@ -92,7 +92,7 @@ class SectionController extends Controller
             'clubs_id' => $request['clubs_id'],
         ));
 
-        return redirect('/sections');
+        return redirect('/admin/sections');
     }
 
     /**
@@ -105,7 +105,7 @@ class SectionController extends Controller
     {
         $section->delete();
 
-        return redirect('/sections');
+        return redirect('/admin/sections');
     }
 
     protected function validateSection()

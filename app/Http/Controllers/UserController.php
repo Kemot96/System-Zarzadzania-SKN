@@ -47,7 +47,7 @@ class UserController extends Controller
             'password' => Hash::make($request['password']),
         ]);
 
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 
     /**
@@ -99,7 +99,7 @@ class UserController extends Controller
             ));
         }
 
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 
     /**
@@ -112,7 +112,7 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect('/users');
+        return redirect('/admin/users');
     }
 
     protected function validateStoreUser()
