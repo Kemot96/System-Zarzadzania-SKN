@@ -30,7 +30,10 @@ class CreateReportsTable extends Migration
             $table->unsignedBigInteger('types_id');
             $table->foreign('types_id')->references('id')->on('type_of_report')->onDelete('cascade');
             $table->text('description');
-            $table->text('remarks');
+            $table->text('remarks')->nullable();
+            $table->boolean('supervisor_approved')->nullable();
+            $table->boolean('secretariat_approved')->nullable();
+            $table->boolean('vice-rector_approved')->nullable();
             $table->timestamps();
         });
     }

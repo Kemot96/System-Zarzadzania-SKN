@@ -37,4 +37,9 @@ class AcademicYear extends Model
     {
         return $this->hasMany(SectionMember::class, 'academic_years_id');
     }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'academic_years_id');
+    }
 }

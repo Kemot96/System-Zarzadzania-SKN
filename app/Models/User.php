@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(ClubMember::class, 'users_id');
     }
 
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'users_id');
+    }
+
     public function files()
     {
         return $this->hasMany(File::class, 'users_id');

@@ -22,4 +22,29 @@ class Report extends Model
         'description',
         'remarks',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
+    public function club()
+    {
+        return $this->belongsTo(Club::class, 'clubs_id');
+    }
+
+    public function academicYear()
+    {
+        return $this->belongsTo(AcademicYear::class, 'academic_years_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(TypeOfReport::class, 'types_id');
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class, 'reports_id');
+    }
 }

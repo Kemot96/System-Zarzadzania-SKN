@@ -46,6 +46,11 @@ class Club extends Model
         return $this->hasMany(ClubMember::class, 'clubs_id');
     }
 
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'clubs_id');
+    }
+
     public function getLoggedUserRoleName(){
         $user = Auth::user();
 
