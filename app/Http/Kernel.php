@@ -63,5 +63,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'club.access' => \App\Http\Middleware\AccessToClubPage::class,
+        'admin' => \App\Http\Middleware\AccessToAdminPanel::class,
     ];
 }

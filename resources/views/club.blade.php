@@ -1,6 +1,11 @@
-{{$club->name}}
+@extends('layouts.layout')
+
+@section('content')
+
+{{$club->name}}<br>
 @if($club->getLoggedUserRoleName() == 'opiekun_koła')
-    <a href="{{route('clubMembers.index2', ['club' => $club])}}">Lista członków koła</a>
+    <a href="{{route('clubMembers.index2', ['club' => $club])}}">Lista członków koła</a><br>
+    <a href="{{route('clubReport.showReportsForApproval', ['club' => $club])}}">Pisma czekające na akceptację</a>
 @endif
 @if($report != NULL)
     <br><a href="{{ route('clubReport.edit',[$club->id, $report->id])}}" class="btn btn-primary">Edytuj sprawozdanie</a>
@@ -37,4 +42,6 @@
 @foreach($files as $file)
     {{$file->name}}<br>
 @endforeach
+
+@endsection
 

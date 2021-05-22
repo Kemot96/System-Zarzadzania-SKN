@@ -134,10 +134,11 @@
 
 </head>
 <body>
+<div class="container">
     <!-- Sidebar -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h3>Bootstrap Sidebar</h3>
+            <h3>Lista tabel</h3>
         </div>
 
         <ul class="list-unstyled components">
@@ -156,7 +157,7 @@
         </ul>
     </nav>
 
-<div class="container">
+
   @yield('content')
 </div>
 <script src="{{ asset('js/app.js') }}" type="text/js"></script>

@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.adminLayout')
 
 @section('content')
 
@@ -9,18 +9,22 @@
               <thead>
               <tr>
                   <td>Nazwa</td>
-                  <td>Email</td>
+                  <td>Ikona</td>
                   <td colspan="2">Akcje</td>
               </tr>
               </thead>
               <tbody>
-              @foreach($users as $user)
+              @foreach($clubs as $club)
                   <tr>
-                      <td>{{$user->name}}</td>
-                      <td>{{$user->email}}</td>
-                      <td><a href="{{ route('users.edit',$user->id)}}" class="btn btn-primary">Edytuj</a></td>
+                      <td>{{$club->name}}</td>
+                      <td><img src="{{ asset('storage/' . $club->icon) }}"
+                               alt=""
+                               style=""
+                               width="150"
+                          ></td>
+                      <td><a href="{{ route('clubs.edit',$club->id)}}" class="btn btn-primary">Edytuj</a></td>
                       <td>
-                          <form action="{{ route('users.destroy', $user->id)}}" method="post">
+                          <form action="{{ route('clubs.destroy', $club->id)}}" method="post">
                               @csrf
                               @method('DELETE')
                               <button onclick="return confirm('Jesteś pewien?')" class="btn btn-danger" type="submit">Usuń</button>
@@ -30,7 +34,8 @@
               @endforeach
               </tbody>
           </table>
-          <a href="{{ route('users.create')}}" class="btn btn-success">Dodaj użytkownika</a>
+          {{ $clubs->links() }}
+          <a href="{{ route('clubs.create')}}" class="btn btn-success">Dodaj klub</a>
           <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 
       </div>

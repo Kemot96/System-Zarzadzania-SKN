@@ -24,5 +24,10 @@ class Role extends Model
         return $this->hasMany(ClubMember::class, 'roles_id');
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class, 'roles_id');
+    }
+
 
 }

@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.adminLayout')
 
 @section('content')
 
@@ -30,6 +30,7 @@
               @endforeach
               </tbody>
           </table>
+          {{ $sections->links() }}
           <a href="{{ route('sections.create')}}" class="btn btn-success">Dodaj sekcję</a>
           <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 

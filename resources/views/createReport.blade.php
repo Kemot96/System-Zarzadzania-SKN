@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.layout')
 
 @section('content')
 
@@ -25,19 +25,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="remarks" class="col-md-4 col-form-label text-md-right">{{ __('Dodatkowe uwagi') }}</label>
-
-                            <div class="col-md-6">
-                                <textarea id="remarks" type="text" class="form-control @error('remarks') is-invalid @enderror" name="remarks" value="{{ old('remarks') }}" autocomplete="off"></textarea>
-
-                                @error('remarks')
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">

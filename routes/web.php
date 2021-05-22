@@ -21,7 +21,7 @@ use App\Models\Club;
 */
 Auth::routes();
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('clubs', ClubController::class);
     Route::resource('sections', SectionController::class);
@@ -29,6 +29,14 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::get('/', [App\Http\Controllers\ClubController::class, 'frontPage'])->name('index');
+
+
+Route::get('/secretariat/reports-for-approval', [App\Http\Controllers\ReportController::class, 'showReportsForApprovalSecretariat'])->name('secretariat.showReports');
+Route::patch('secretariat/reports-for-approval/{report}', [App\Http\Controllers\ReportController::class, 'ReportActionAsSecretariat'])->name('secretariat.reportAction');
+
+Route::get('/vice-rector/reports-for-approval', [App\Http\Controllers\ReportController::class, 'showReportsForApprovalViceRector'])->name('vice-rector.showReports');
+Route::patch('vice-rector/reports-for-approval/{report}', [App\Http\Controllers\ReportController::class, 'ReportActionAsViceRector'])->name('vice-rector.reportAction');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -38,10 +46,13 @@ Route::get('/{club}', [App\Http\Controllers\ClubController::class, 'mainPage'])-
 
 Route::post('/{club}', [App\Http\Controllers\FileController::class, 'store'])->middleware(['auth', 'club.access'])->name('clubMainPageFile.store');
 
+Route::get('/{club}/reports-for-approval', [App\Http\Controllers\ReportController::class, 'showReportsForApprovalForClub'])->middleware(['auth'])->name('clubReport.showReportsForApproval');
+Route::patch('/{club}/reports-for-approval/{report}', [App\Http\Controllers\ReportController::class, 'ReportActionAsSupervisor'])->middleware(['auth'])->name('clubReport.ReportActionAsSupervisor');
 Route::get('/{club}/createReport', [App\Http\Controllers\ReportController::class, 'create'])->middleware(['auth'])->name('clubReport.create');
 Route::get('/{club}/{report}/editReport', [App\Http\Controllers\ReportController::class, 'edit'])->middleware(['auth'])->name('clubReport.edit');
 Route::post('/{club}/createReport', [App\Http\Controllers\ReportController::class, 'store'])->middleware(['auth'])->name('clubReport.store');
 Route::patch('/{club}/{report}/editReport', [App\Http\Controllers\ReportController::class, 'update'])->middleware(['auth'])->name('clubReport.update');
+Route::post('/{club}/{report}/editReport', [App\Http\Controllers\ReportController::class, 'submit'])->middleware(['auth'])->name('clubReport.submitToSupervisor');
 Route::get('/{club}/{report}/editReport/generate', [App\Http\Controllers\ReportController::class, 'generate'])->middleware(['auth'])->name('clubReport.generate');
 //
 Route::get('/{club}/members', [App\Http\Controllers\ClubMemberController::class, 'index2'])->middleware(['auth'])->name('clubMembers.index2');
@@ -52,6 +63,8 @@ Route::get('/{club}/join', [App\Http\Controllers\ClubMemberController::class, 'j
 Route::post('/{club}/join', [App\Http\Controllers\ClubMemberController::class, 'join'])->name('join');
 
 require __DIR__.'/auth.php';
+
+Route::get('/download/{path}', [App\Http\Controllers\ReportController::class, 'download'])->name('report.download')->where('path', '.*');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

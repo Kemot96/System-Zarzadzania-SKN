@@ -15,9 +15,9 @@ class SectionController extends Controller
      */
     public function index()
     {
-        $sections = Section::latest()->get();
+        $sections = Section::latest()->paginate(10);
 
-        return view('sections.index', compact('sections'));
+        return view('databaseTables.sections.index', compact('sections'));
     }
 
     /**
@@ -29,7 +29,7 @@ class SectionController extends Controller
     {
         $clubs = Club::latest()->get();
 
-        return view('sections.create',  compact('clubs'));
+        return view('databaseTables.sections.create',  compact('clubs'));
     }
 
     /**
@@ -72,7 +72,7 @@ class SectionController extends Controller
     {
         $clubs = Club::latest()->get();
 
-        return view('sections.edit', compact('section', 'clubs'));
+        return view('databaseTables.sections.edit', compact('section', 'clubs'));
     }
 
     /**

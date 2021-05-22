@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.adminLayout')
 
 @section('content')
 
@@ -34,6 +34,7 @@
               @endforeach
               </tbody>
           </table>
+          {{ $club_members->links() }}
           <a href="{{ route('clubMembers.create')}}" class="btn btn-success">Dodaj członka klubu</a>
           <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 

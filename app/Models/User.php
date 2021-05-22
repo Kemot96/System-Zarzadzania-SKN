@@ -21,6 +21,7 @@ class User extends Authenticatable
         'email',
         'password',
         'roles_id',
+        'institutes_id',
     ];
 
     /**
@@ -55,5 +56,22 @@ class User extends Authenticatable
     public function files()
     {
         return $this->hasMany(File::class, 'users_id');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'roles_id');
+    }
+
+    public function isAdministrator() {
+        return $this->role()->where('name', 'admin')->exists();
+    }
+
+    public function isSecretariat() {
+        return $this->role()->where('name', 'sekretariat_prorektora')->exists();
+    }
+
+    public function isViceRector() {
+        return $this->role()->where('name', 'prorektor')->exists();
     }
 }

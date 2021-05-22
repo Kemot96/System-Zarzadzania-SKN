@@ -19,14 +19,14 @@ class ClubMemberController extends Controller
      */
     public function index()
     {
-        $club_members = ClubMember::latest()->get();
+        $club_members = ClubMember::latest()->paginate(10);;
 
-        return view('clubMembers.index', compact('club_members'));
+        return view('databaseTables.clubMembers.index', compact('club_members'));
     }
 
     public function index2($club)
     {
-        $current_academic_year = AcademicYear::latest()->where('current_year', '1')->first();
+        $current_academic_year = getCurrentAcademicYear();
 
         $club_members = ClubMember::latest()->where('clubs_id', $club)->where('academic_years_id', $current_academic_year->id)->get();
 
@@ -45,7 +45,7 @@ class ClubMemberController extends Controller
         $clubs = Club::latest()->get();
         $academic_years = AcademicYear::latest()->get();
 
-        return view('clubMembers.create',  compact('users', 'roles', 'clubs', 'academic_years'));
+        return view('databaseTables.clubMembers.create',  compact('users', 'roles', 'clubs', 'academic_years'));
     }
 
     /**
@@ -92,7 +92,7 @@ class ClubMemberController extends Controller
         $academic_years = AcademicYear::latest()->get();
 
 
-        return view('clubMembers.edit', compact('clubMember', 'roles', 'clubs', 'academic_years'));
+        return view('databaseTables.clubMembers.edit', compact('clubMember', 'roles', 'clubs', 'academic_years'));
     }
 
     /**

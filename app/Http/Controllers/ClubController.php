@@ -20,9 +20,9 @@ class ClubController extends Controller
      */
     public function index()
     {
-        $clubs = Club::latest()->get();
+        $clubs = Club::latest()->paginate(10);;
 
-        return view('clubs.index', compact('clubs'));
+        return view('databaseTables.clubs.index', compact('clubs'));
     }
 
     /**
@@ -32,7 +32,7 @@ class ClubController extends Controller
      */
     public function create()
     {
-        return view('clubs.create');
+        return view('databaseTables.clubs.create');
     }
 
     /**
@@ -80,7 +80,7 @@ class ClubController extends Controller
      */
     public function edit(Club $club)
     {
-        return view('clubs.edit', compact('club'));
+        return view('databaseTables.clubs.edit', compact('club'));
     }
 
     /**

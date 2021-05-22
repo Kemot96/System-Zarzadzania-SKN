@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Institute;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,9 +18,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->get();
+        $users = User::latest()->paginate(10);
 
-        return view('users.index', compact('users'));
+        return view('databaseTables.users.index', compact('users'));
     }
 
     /**
@@ -28,7 +30,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        return view('databaseTables.users.create');
     }
 
     /**
@@ -69,7 +71,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $roles = Role::latest()->where('special_role', '1')->get();
+        $institutes = Institute::latest()->get();
+
+        return view('databaseTables.users.edit', compact('user', 'roles', 'institutes'));
     }
 
     /**
@@ -88,6 +93,8 @@ class UserController extends Controller
             $user->update(array(
                 'name' => $request['name'],
                 'email' => $request['email'],
+                'roles_id' => $request['roles_id'],
+                'institutes_id' => $request['institutes_id'],
             ));
         }
         else if($request['name'] == NULL)
@@ -133,6 +140,8 @@ class UserController extends Controller
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($user->id)],
+            'roles_id' => 'nullable|exists:App\Models\Role,id,special_role,1',
+            'institutes_id' => 'nullable|exists:App\Models\Institute,id',
         ]);
     }
 

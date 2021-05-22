@@ -21,6 +21,9 @@ class Report extends Model
         'types_id',
         'description',
         'remarks',
+        'supervisor_approved',
+        'secretariat_approved',
+        'vice-rector_approved',
     ];
 
     public function user()

@@ -1,21 +1,22 @@
-@extends('layout')
+@extends('layouts.adminLayout')
 
 @section('content')
 
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dodaj sekcję') }}</div>
+                <div class="card-header">{{ __('Edytuj klub') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('sections.store') }}">
+                    <form method="POST" action="{{ route('clubs.update', $club->id) }}" enctype="multipart/form-data">
+                        @method('PATCH')
                         @csrf
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nazwa') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="off" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $club->name }}" required autocomplete="off" autofocus>
 
                                 @error('name')
                                 <span class="invalid-feedback" role="alert">
@@ -29,7 +30,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Opis') }}</label>
 
                             <div class="col-md-6">
-                                <textarea id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" autocomplete="off"></textarea>
+                                <textarea id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" autocomplete="off">{{ $club->description }}</textarea>
 
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
@@ -40,16 +41,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="clubs_id" class="col-md-4 col-form-label text-md-right">{{ __('Klub') }}</label>
-
+                            <label for="icon" class="col-md-4 col-form-label text-md-right">{{ __('Ikonka') }}</label>
                             <div class="col-md-6">
-                                <select id="clubs_id" class="form-control @error('clubs_id') is-invalid @enderror" name="clubs_id">
-                                    @foreach($clubs as $club)
-                                        <option value="{{$club->id}}">{{$club->name}}</option>
-                                    @endforeach
-                                </select>
+                                <input id="icon" type="file" class="form-control-file @error('description') is-invalid @enderror" name="icon">
 
-                                @error('clubs_id')
+                                @error('icon')
                                 <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -60,7 +56,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Dodaj sekcję') }}
+                                    {{ __('Edytuj klub') }}
                                 </button>
                             </div>
                         </div>
