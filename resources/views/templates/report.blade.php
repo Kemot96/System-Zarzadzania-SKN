@@ -4,28 +4,38 @@
     <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style>
-        * { font-family: DejaVu Sans, sans-serif; }
+        * { font-family: DejaVu Sans, sans-serif;
+            font-size:15px;}
         .center-blue {
+            font-weight: bold;
             text-align: center;
-            color: blue;
+            color: #526ce0;
+            margin-left: 2.5cm;
+            margin-right: 2.5cm;
         }
+        @page {
+            margin-left: 2.5cm;
+            margin-right: 3cm;
+        }
+
     </style>
 </head>
 <body>
+<div class="container">
 <div class="center-blue">
     Sprawozdanie z działalności Koła Naukowego {{$club_name}}
     Państwowej Wyższej Szkoły Zawodowej w Elblągu
     w roku akademickim {{$current_academic_year}}
 </div>
 <div>
-    <p>{!! nl2br(e($description)) !!}</p>
+    <p>{!! $club_description !!}</p>
 </div>
 <div>
 <p>W roku akademickim {{$current_academic_year}} w ramach Koła realizowane były następujące zadania:</p>
 </div>
 
 <div>
-    <p>{!! nl2br(e($report_description)) !!}</p>
+    <p>{!! $report_description !!}</p>
 </div>
 
 <div>Lista członków <b>Koła Naukowego {{$club_name}}</b> w roku akademickim {{$current_academic_year}}:</div>
@@ -40,6 +50,6 @@
 </div>
 
 <div>Opiekunem <b>Koła Naukowego {{$club_name}}</b> jest {{$supervisor_name}}.</div>
-
+</div>
 </body>
 </html>

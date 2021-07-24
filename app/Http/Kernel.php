@@ -64,5 +64,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'club.access' => \App\Http\Middleware\AccessToClubPage::class,
         'admin' => \App\Http\Middleware\AccessToAdminPanel::class,
+        'secretariat' => \App\Http\Middleware\AccessToSecretariatPanel::class,
+        'viceRector' => \App\Http\Middleware\AccessToViceRectorPanel::class,
     ];
 }

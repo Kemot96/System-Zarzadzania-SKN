@@ -21,7 +21,7 @@ class CreateReportsTable extends Migration
 
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('users_id');
+            $table->unsignedBigInteger('users_id')->nullable();
             $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('clubs_id');
             $table->foreign('clubs_id')->references('id')->on('clubs')->onDelete('cascade');
@@ -29,7 +29,7 @@ class CreateReportsTable extends Migration
             $table->foreign('academic_years_id')->references('id')->on('academic_years')->onDelete('cascade');
             $table->unsignedBigInteger('types_id');
             $table->foreign('types_id')->references('id')->on('type_of_report')->onDelete('cascade');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->text('remarks')->nullable();
             $table->boolean('supervisor_approved')->nullable();
             $table->boolean('secretariat_approved')->nullable();

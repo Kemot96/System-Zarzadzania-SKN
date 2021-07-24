@@ -20,6 +20,7 @@ class ClubMember extends Model
         'roles_id',
         'clubs_id',
         'academic_years_id',
+        'removal_request',
     ];
 
     public function getCreatedAtAttribute($value)
@@ -51,5 +52,4 @@ class ClubMember extends Model
     {
         return $this->belongsTo(AcademicYear::class, 'academic_years_id');
     }
-
 }

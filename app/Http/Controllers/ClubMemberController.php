@@ -7,30 +7,40 @@ use App\Models\Club;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\ClubMember;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isEmpty;
 
 class ClubMemberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Club $club, AcademicYear $academicYear)
     {
-        $club_members = ClubMember::latest()->paginate(10);;
+        $clubs = Club::orderBy('name')->get();
+        $academic_years = AcademicYear::orderBy('name')->get();
 
-        return view('databaseTables.clubMembers.index', compact('club_members'));
-    }
+        if($club->exists == FALSE || $academicYear->exists == FALSE)
+        {
+            $club = Club::orderBy('name')->first();
+            $academicYear = getCurrentAcademicYear();
+            return redirect()->route('clubMembers.index', ['club' => $club, 'academicYear' => $academicYear]);
+        }
+        elseif($club->exists == FALSE)
+        {
+            $club = Club::orderBy('name')->first();
+            return redirect()->route('clubMembers.index', ['club' => $club, 'academicYear' => $academicYear]);
+        }
 
-    public function index2($club)
-    {
-        $current_academic_year = getCurrentAcademicYear();
+        elseif($academicYear->exists == FALSE)
+        {
+            $academicYear = getCurrentAcademicYear();
+            return redirect()->route('clubMembers.index', ['club' => $club, 'academicYear' => $academicYear]);
+        }
 
-        $club_members = ClubMember::latest()->where('clubs_id', $club)->where('academic_years_id', $current_academic_year->id)->get();
 
-        return view('members', compact('club', 'club_members'));
+        $club_members = ClubMember::latest()->where('clubs_id', $club->id)->where('academic_years_id', $academicYear->id)->paginate(10);
+
+        return view('databaseTables.clubMembers.index', compact('club_members', 'clubs', 'club', 'academic_years', 'academicYear'));
     }
 
     /**
@@ -41,7 +51,7 @@ class ClubMemberController extends Controller
     public function create()
     {
         $users = User::latest()->get();
-        $roles = Role::latest()->where('special_role', '0')->get();
+        $roles = Role::orderBy('name')->where('special_role', '0')->where('name', '!=', 'nieaktywny')->get();
         $clubs = Club::latest()->get();
         $academic_years = AcademicYear::latest()->get();
 
@@ -115,19 +125,6 @@ class ClubMemberController extends Controller
         return redirect('/admin/clubMembers');
     }
 
-    public function update2($club, ClubMember $clubMember)
-    {
-        //$this->validateUpdateClubMember();
-
-
-
-        $clubMember->update(array(
-            'roles_id' => 2,
-        ));
-
-        return back();
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -141,44 +138,39 @@ class ClubMemberController extends Controller
         return redirect('/admin/clubMembers');
     }
 
-    public function destroy2($club, ClubMember $clubMember)
+    public function generate(Club $club, AcademicYear $academicYear)
     {
-        $clubMember->delete();
+        $club_name = $club->name;
+
+        $member_role_id = Role::where('name', 'członek_koła')->first()->id;
+        $supervisor_role_id = Role::where('name', 'opiekun_koła')->first()->id;
+        $chairman_role_id = Role::where('name', 'przewodniczący_koła')->first()->id;
+
+        $supervisor_id = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', $academicYear->id) -> where('roles_id', $supervisor_role_id)->first()->users_id;
+        $chairman_id = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', $academicYear->id) -> where('roles_id', $chairman_role_id)->first()->users_id;
+
+        $supervisor_name = User::where('id', $supervisor_id)->first()->name;
+        $chairman_name = User::where('id', $chairman_id)->first()->name;
+
+        $club_members = ClubMember::latest()->where('clubs_id', $club->id)->where('academic_years_id', $academicYear->id)->where('roles_id', $member_role_id)->get();
+
+        // use the dompdf class
+        $content = view('templates.membershipReport', compact('club_name','club_members', 'supervisor_name', 'chairman_name', 'academicYear')) -> render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($content);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+        // Output the generated PDF to Browser
+        $dompdf->stream();
 
         return back();
     }
 
-    public function joinPage(Club $club)
-    {
-        $request_to_join_send = false;
-
-        if(ClubMember::where('users_id', Auth::user()->id) -> where('clubs_id', $club->id) -> where('academic_years_id', getCurrentAcademicYear()->id)->exists())
-        {
-            $request_to_join_send = true;
-        }
-
-        return view('joinClub', compact('club', 'request_to_join_send'));
-    }
-
-
-    public function join(Request $request)
-    {
-        $user_id = Auth::user()->id;
-        $club_id = $request->club;
-        $role_id = Role::latest()->find(1)->where('name', 'nieaktywny')->first()->id;
-        $current_academic_year_id = getCurrentAcademicYear()->id;
-
-        //$this->validateJoinClubMember();
-
-        ClubMember::create([
-            'users_id' => $user_id,
-            'roles_id' => $role_id,
-            'clubs_id' => $club_id,
-            'academic_years_id' => $current_academic_year_id,
-        ]);
-
-        return back();
-    }
 
     protected function validateStoreClubMember()
     {

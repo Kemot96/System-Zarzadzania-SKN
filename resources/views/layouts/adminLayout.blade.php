@@ -6,6 +6,15 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin</title>
   <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+            crossorigin="anonymous"></script>
+
     <style>
             table, td, tr {
                 border: 2px solid black;
@@ -146,13 +155,16 @@
                 <a href="{{route('users.index')}}">Użytkownicy</a>
             </li>
             <li>
-                <a href="{{route('clubs.index')}}">Kluby</a>
+                <a href="{{route('clubs.index')}}">Koła naukowe</a>
             </li>
             <li>
                 <a href="{{route('sections.index')}}">Sekcje</a>
             </li>
             <li>
-                <a href="{{route('clubMembers.index')}}">Członkowie klubów</a>
+                <a href="{{route('clubMembers.index')}}">Członkowie kół/sekcji</a>
+            </li>
+            <li>
+                <a href="{{route('emails.index')}}">Emaile</a>
             </li>
         </ul>
     </nav>

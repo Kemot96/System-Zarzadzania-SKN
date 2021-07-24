@@ -6,6 +6,7 @@ use App\Models\AcademicYear;
 use App\Models\Club;
 use App\Models\ClubMember;
 use App\Models\Report;
+use App\Models\TypeOfReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -20,7 +21,7 @@ class ClubController extends Controller
      */
     public function index()
     {
-        $clubs = Club::latest()->paginate(10);;
+        $clubs = Club::latest()->paginate(10);
 
         return view('databaseTables.clubs.index', compact('clubs'));
     }
@@ -52,10 +53,29 @@ class ClubController extends Controller
             $path = $request->file('icon')->store('clubsIcons', 'public');
         }
 
-        Club::create([
+        $club = Club::create([
             'name' => $request['name'],
             'description' => $request['description'],
             'icon' => $path,
+        ]);
+
+
+        Report::create([
+            'clubs_id' => $club->id,
+            'academic_years_id' => getCurrentAcademicYear()->id,
+            'types_id' => TypeOfReport::getReportID(),
+        ]);
+
+        Report::create([
+            'clubs_id' => $club->id,
+            'academic_years_id' => getCurrentAcademicYear()->id,
+            'types_id' => TypeOfReport::getSpendingPlanID(),
+        ]);
+
+        Report::create([
+            'clubs_id' => $club->id,
+            'academic_years_id' => getCurrentAcademicYear()->id,
+            'types_id' => TypeOfReport::getActionPlanID(),
         ]);
 
         return redirect('/admin/clubs');
@@ -129,28 +149,6 @@ class ClubController extends Controller
         $club->delete();
 
         return redirect('/admin/clubs');
-    }
-
-    public function frontPage()
-    {
-        $clubs = Club::latest()->get();
-
-        return view('index', compact('clubs'));
-    }
-
-    public function mainPage(Club $club)
-    {
-        $files = $club->files;
-
-        $current_academic_year_id = getCurrentAcademicYear()->id;
-
-        $report = NULL;
-
-        if (Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->exists()) {
-            $report = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->first();
-        }
-
-        return view('club', compact('club', 'files', 'report'));
     }
 
 

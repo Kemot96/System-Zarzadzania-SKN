@@ -21,6 +21,7 @@ class Club extends Model
         'description',
     ];
 
+
     public function getCreatedAtAttribute($value)
     {
         return date('d-m-Y H:i:s', strtotime($value));

@@ -1,8 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-
-
+    <div class="container">
     <div class="row row-cols-4">
         @foreach($clubs as $club)
             <div class="col-xs-12 col-sm-3 col-md-3 mb-40 xs-margin-bottom-20px">
@@ -12,5 +11,5 @@
             </div>
         @endforeach
     </div>
-
+    </div>
 @endsection

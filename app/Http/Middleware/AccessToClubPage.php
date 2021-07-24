@@ -22,6 +22,7 @@ class AccessToClubPage
     public function handle(Request $request, Closure $next)
     {
         $club = $request->club;
+
         $role_name = $club->getLoggedUserRoleName();
         if($role_name == 'opiekun_koła'|| $role_name == 'członek_koła' || $role_name == 'przewodniczący_koła')
         {

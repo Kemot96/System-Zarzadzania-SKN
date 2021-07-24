@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
-
+    <div class="container">
 @if($request_to_join_send == false)
     <form method="POST" action="{{route('join', ['club' => $club])}}">
         @csrf
@@ -19,7 +19,7 @@
     <div>Prośba o dołączenie została wysłana</div>
 @endif
 
-<div>{{$club->name}}</div>
+    </div>
 
 @endsection
 

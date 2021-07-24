@@ -71,7 +71,7 @@
                             <div class="col-md-6">
                                 <select id="academic_years_id" class="form-control @error('academic_years_id') is-invalid @enderror" name="academic_years_id">
                                     @foreach($academic_years as $academic_year)
-                                        <option value="{{$academic_year->id}}">{{$academic_year->name}}</option>
+                                        <option value="{{$academic_year->id}}" @if($academic_year->id == getCurrentAcademicYear()->id) selected="selected" @endif>{{$academic_year->name}}</option>
                                     @endforeach
                                 </select>
 

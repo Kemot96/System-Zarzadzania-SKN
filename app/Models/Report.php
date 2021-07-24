@@ -50,4 +50,9 @@ class Report extends Model
     {
         return $this->hasMany(Attachment::class, 'reports_id');
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'reports_id');
+    }
 }

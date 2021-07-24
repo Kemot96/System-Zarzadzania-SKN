@@ -2,6 +2,8 @@
 
 @section('content')
 
+    <script src="{{ asset('/js/reportsModal.js') }} "></script>
+    <div class="container">
     <!-- Page Content -->
     <div id="content">
 
@@ -21,57 +23,94 @@
                     <td>{{$report->type->name}}</td>
                     <td>
                         @foreach($report->attachments as $attachment)
-                            {{$attachment->name}}
+                            <a href="{{ route('downloadAttachment', ['path' => $attachment->name])}}">{{$attachment->original_file_name}}</a>
                         @endforeach
                     </td>
                     @if(!isset($report->secretariat_approved))
                         <td>
-                            <form action="{{ route('secretariat.reportAction', [$report->id])}}" method="post">
+                            <form action="{{ route('secretariat.reportAction')}}" method="post">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="action" value="accept">
+                                <input type="hidden" name="modal-input-report-id" id="modal-input-report-id1" value="{{$report->id}}">
                                 <button class="btn btn-success" type="submit">Zatwierdź</button>
                             </form>
                         </td>
                         <td>
-                            <form action="{{ route('secretariat.reportAction', [$report->id])}}" method="post">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="action" value="dismiss">
-                                <button class="btn btn-danger" type="submit">Odrzuć</button>
-                            </form>
+                            <button id="edit-item" data-toggle="modal" data-item-id="{{$report->id}}" class="btn btn-danger" type="button">Odrzuć</button>
                         </td>
                     @elseif($report->secretariat_approved == TRUE)
                         <td>
                             Zaakceptowano
                         </td>
                         <td>
-                            <form action="{{ route('secretariat.reportAction', [$report->id])}}" method="post">
+                            @if($report['vice-rector_approved'] == TRUE)
+                                Zaakceptowano przez wice-rektora
+                            @else
+                            <form action="{{ route('secretariat.reportAction')}}" method="post">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="action" value="undo">
+                                <input type="hidden" name="modal-input-report-id" id="modal-input-report-id2" value="{{$report->id}}">
                                 <button class="btn btn-danger" type="submit">Cofnij akcję</button>
                             </form>
+                            @endif
                         </td>
                     @elseif($report->secretariat_approved == FALSE)
                         <td>
                             Odrzucono
                         </td>
                         <td>
-                            <form action="{{ route('secretariat.reportAction', [$report->id])}}" method="post">
+                            <form action="{{ route('secretariat.reportAction')}}" method="post">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="action" value="undo">
+                                <input type="hidden" name="modal-input-report-id" id="modal-input-report-id3" value="{{$report->id}}">
                                 <button class="btn btn-danger" type="submit">Cofnij akcję</button>
                             </form>
                         </td>
                     @endif
-
                 </tr>
             @endforeach
             </tbody>
         </table>
         <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
+    </div>
+
+    <!-- Attachment Modal -->
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form action="{{ route('secretariat.reportAction')}}" method="post">
+                    <div class="modal-body" id="attachment-body-content">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="action" value="dismiss">
+                        <input type="hidden" name="modal-input-report-id" id="modal-input-report-id4">
+
+                        <div class="card text-white bg-dark mb-0">
+                            <div class="card-header">
+                                <h2 class="m-0">Edit</h2>
+                            </div>
+                            <div class="card-body">
+                                <!-- remarks -->
+                                <div class="form-group">
+                                    <label class="col-form-label" for="modal-input-remarks">Uwagi</label>
+                                    <input type="text" name="modal-input-remarks" class="form-control" id="modal-input-remarks">
+                                </div>
+                                <!-- /remarks -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">Wyślij</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Attachment Modal -->
     </div>
 @endsection
 

@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Club;
-use App\Models\File;
+use App\Models\Email;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class FileController extends Controller
+class EmailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,9 @@ class FileController extends Controller
      */
     public function index()
     {
-        //
+        $emails = Email::latest()->paginate(10);
+
+        return view('databaseTables.emails.index', compact('emails'));
     }
 
     /**
@@ -32,31 +32,21 @@ class FileController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Club $club)
+    public function store(Request $request)
     {
-        //$this->validateStoreClub();
-
-        $path = $request->file('file')->store('clubsFiles', 'public');
-
-        File::create([
-            'name' => $path,
-            'clubs_id' => $club -> id,
-            'users_id' => Auth::user() -> id,
-        ]);
-
-        return back();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\File  $file
+     * @param \App\Models\Email $email
      * @return \Illuminate\Http\Response
      */
-    public function show(File $file)
+    public function show(Email $email)
     {
         //
     }
@@ -64,33 +54,40 @@ class FileController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\File  $file
+     * @param \App\Models\Email $email
      * @return \Illuminate\Http\Response
      */
-    public function edit(File $file)
+    public function edit(Email $email)
     {
-        //
+        return view('databaseTables.emails.edit', compact('email'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\File  $file
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Email $email
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, File $file)
+    public function update(Request $request, Email $email)
     {
-        //
+        //$this->validateUpdateEmail($email);
+
+        $email->update(array(
+            'message' => $request['message'],
+        ));
+
+
+        return redirect('/admin/emails');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\File  $file
+     * @param \App\Models\Email $email
      * @return \Illuminate\Http\Response
      */
-    public function destroy(File $file)
+    public function destroy(Email $email)
     {
         //
     }

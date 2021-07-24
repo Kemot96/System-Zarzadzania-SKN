@@ -12,6 +12,7 @@ class Attachment extends Model
     protected $fillable = [
         'reports_id',
         'name',
+        'original_file_name',
     ];
 
     public function report()

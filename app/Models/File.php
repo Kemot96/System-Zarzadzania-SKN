@@ -18,6 +18,7 @@ class File extends Model
         'name',
         'clubs_id',
         'users_id',
+        'original_file_name',
     ];
 
     public function getCreatedAtAttribute($value)

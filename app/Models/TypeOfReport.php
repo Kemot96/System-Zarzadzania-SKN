@@ -20,6 +20,21 @@ class TypeOfReport extends Model
         'name',
     ];
 
+    public static function getReportID()
+    {
+        return TypeOfReport::where('name', 'Sprawozdanie')->first()->id;
+    }
+
+    public static function getSpendingPlanID()
+    {
+        return TypeOfReport::where('name', 'Plan wydatków')->first()->id;
+    }
+
+    public static function getActionPlanID()
+    {
+        return TypeOfReport::where('name', 'Plan działań')->first()->id;
+    }
+
     public function reports()
     {
         return $this->hasMany(Report::class, 'types_id');

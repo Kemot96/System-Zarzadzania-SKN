@@ -17,6 +17,7 @@ class TypeOfReportSeeder extends Seeder
         DB::table('type_of_report')->insert([
             ['name' => "Sprawozdanie", 'created_at' => now(), 'updated_at' => now()],
             ['name' => "Plan działań", 'created_at' => now(), 'updated_at' => now()],
+            ['name' => "Plan wydatków", 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

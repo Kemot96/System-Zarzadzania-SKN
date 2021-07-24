@@ -16,6 +16,7 @@ class AcademicYear extends Model
      */
     protected $fillable = [
         'name',
+        'current_year',
     ];
 
     public function getCreatedAtAttribute($value)
