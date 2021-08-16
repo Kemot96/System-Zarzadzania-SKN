@@ -18,9 +18,17 @@ if (! function_exists('getClubSupervisor')) {
 
         $supervisor_role_id = Role::where('name', 'opiekun_koła')->first()->id;
 
-        $supervisor_id = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $supervisor_role_id)->first()->users_id;
+        $supervisor = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $supervisor_role_id)->first();
 
-        return User::where('id', $supervisor_id)->first();;
+        if($supervisor)
+        {
+            $supervisor_id = $supervisor -> users_id;
+
+            return User::where('id', $supervisor_id)->first();
+        }
+        else{
+            return NULL;
+        }
     }
 }
 
@@ -29,9 +37,16 @@ if (! function_exists('getClubChairman')) {
 
         $chairman_role_id = Role::where('name', 'przewodniczący_koła')->first()->id;
 
-        $chairman_id = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $chairman_role_id)->first()->users_id;
+        $chairman = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $chairman_role_id)->first();
+        if($chairman)
+        {
+            $chairman_id = $chairman -> users_id;
+            return User::where('id', $chairman_id)->first();
+        }
+        else{
+            return NULL;
+        }
 
-        return User::where('id', $chairman_id)->first();;
     }
 }
 

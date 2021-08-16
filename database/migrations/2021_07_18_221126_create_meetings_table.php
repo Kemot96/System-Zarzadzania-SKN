@@ -18,8 +18,8 @@ class CreateMeetingsTable extends Migration
             $table->unsignedBigInteger('clubs_id');
             $table->foreign('clubs_id')->references('id')->on('clubs')->onDelete('cascade');
             $table->string('topic');
-            $table->json('present_members')->nullable();
-            $table->boolean('supervisor_approved');
+            $table->json('present_members');
+            $table->boolean('supervisor_approved')->nullable();
             $table->timestamps();
         });
     }

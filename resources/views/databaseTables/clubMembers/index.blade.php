@@ -10,7 +10,7 @@
             <tr>
                 <td>Użytkownik</td>
                 <td>Rola</td>
-                <td>Klub</td>
+                <td>Koło/sekcja</td>
                 <td>Rok akademicki</td>
                 <td colspan="2">Akcje</td>
             </tr>
@@ -50,10 +50,10 @@
                     <td>{{$club_member->role->name}}</td>
                     <td>{{$club_member->club->name}}</td>
                     <td>{{$club_member->academicYear->name}}</td>
-                    <td><a href="{{ route('clubMembers.edit',$club_member->id)}}" class="btn btn-primary">Edytuj</a>
+                    <td><a href="{{ route('clubMembers.edit',[$club, $academicYear, $club_member])}}" class="btn btn-primary">Edytuj</a>
                     </td>
                     <td>
-                        <form action="{{ route('clubMembers.destroy', $club_member->id)}}" method="post">
+                        <form action="{{ route('clubMembers.destroy', [$club, $academicYear, $club_member])}}" method="post">
                             @csrf
                             @method('DELETE')
                             <button onclick="return confirm('Jesteś pewien?')" class="btn btn-danger" type="submit">
@@ -66,10 +66,17 @@
             </tbody>
         </table>
         {{ $club_members->links() }}
-        <a href="{{ route('clubMembers.create')}}" class="btn btn-success">Dodaj członka klubu</a>
-        <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
-        <a href="{{ route('clubMembers.generate', [$club, $academicYear])}}" class="btn btn-success">Wygeneruj raport członkostwa</a>
 
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <a href="{{ route('clubMembers.create', [$club, $academicYear])}}" class="btn btn-success">Dodaj członka koła/sekcji</a>
+        <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
+        <a href="{{ route('clubMembers.generatePDF', [$club, $academicYear])}}" class="btn btn-success">Wygeneruj raport członkostwa (PDF)</a>
+        <a href="{{ route('clubMembers.generateDoc', [$club, $academicYear])}}" class="btn btn-success">Wygeneruj raport członkostwa (Doc)</a>
     </div>
 @endsection
 

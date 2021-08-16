@@ -31,6 +31,13 @@
               </tbody>
           </table>
           {{ $users->links() }}
+
+          @if (session('status'))
+              <div class="alert alert-success">
+                  {{ session('status') }}
+              </div>
+          @endif
+
           <a href="{{ route('users.create')}}" class="btn btn-success">Dodaj użytkownika</a>
           <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 

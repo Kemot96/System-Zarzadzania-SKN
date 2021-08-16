@@ -6,22 +6,30 @@
     <style>
         * { font-family: DejaVu Sans, sans-serif;
             font-size:12px;}
-        .center-blue {
+        .center {
+            font-weight: bold;
             text-align: center;
-            color: blue;
+            margin-left: 2.5cm;
+            margin-right: 2.5cm;
+            margin-bottom: 0.5cm;
+        }
+
+        .right {
+            text-align: right;
+            margin-bottom: 1cm;
         }
     </style>
 </head>
 <body>
 <div class="container">
 <div>
-    <p>Rok. Akademicki: {!! $current_academic_year !!}</p>
-    <p>Nazwa koła/sekcji: {!! $club_name !!}</p>
-    <p>Data złożenia planu działań: {!! $current_date !!}</p>
-    <p>Opis planowanych działań: {!! $report_description !!}</p>
-    <p>Osoba przygotowująca sprawozdanie: {!! $person_name !!}</p>
-    <p>Przewodniczący koła {!! $chairman_name !!}</p>
-    <p>Opiekun: {!! $supervisor_name !!}</p>
+    <div class="right">Elbląg, dn. {!! $current_date !!}</div>
+    <div class="center">
+        <p>Plany {{$club_name}}</p>
+        <p>na rok {{$current_academic_year}}</p>
+    </div>
+
+    <div>{!! $report_description !!}</div>
 </div>
 </div>
 </body>

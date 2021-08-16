@@ -8,7 +8,8 @@
                 <div class="card-header">{{ __('Edytuj członka klubu') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('listClubMembers.update', [$club, $clubMember->id]) }}">
+                    {{ Breadcrumbs::render('listClubMembers.edit', $club, $clubMember) }}
+                    <form method="POST" action="{{ route('listClubMembers.update', [$club, $clubMember]) }}">
                         @method('PATCH')
                         @csrf
 

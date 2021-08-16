@@ -7,6 +7,10 @@
   <title>Admin</title>
   <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" />
 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" type="text/css"/>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
@@ -86,92 +90,49 @@
                 line-height: 1.7em;
                 color: #999;
             }
-
-            a, a:hover, a:focus {
-                color: inherit;
-                text-decoration: none;
-                transition: all 0.3s;
-            }
-
-            #sidebar {
-                width: 250px;
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                z-index: 999;
-                background: #7386D5;
-                color: #fff;
-                transition: all 0.3s;
-            }
-
-            #sidebar .sidebar-header {
-                padding: 20px;
-                background: #6d7fcc;
-            }
-
-            #sidebar ul.components {
-                padding: 20px 0;
-                border-bottom: 1px solid #47748b;
-            }
-
-            #sidebar ul p {
-                color: #fff;
-                padding: 10px;
-            }
-
-            #sidebar ul li a {
-                padding: 10px;
-                font-size: 1.1em;
-                display: block;
-            }
-            #sidebar ul li a:hover {
-                color: #7386D5;
-                background: #fff;
-            }
-
-            #sidebar ul li.active > a, a[aria-expanded="true"] {
-                color: #fff;
-                background: #6d7fcc;
-            }
-            ul ul a {
-                font-size: 0.9em !important;
-                padding-left: 30px !important;
-                background: #6d7fcc;
-            }
     </style>
 
 </head>
 <body>
 <div class="container">
     <!-- Sidebar -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>Lista tabel</h3>
+    <nav class="sidebar active">
+
+        <!-- close sidebar menu -->
+        <div class="dismiss">
+            <i class="fas fa-arrow-left"></i>
         </div>
 
-        <ul class="list-unstyled components">
+        <ul class="list-unstyled menu-elements">
             <li>
                 <a href="{{route('users.index')}}">Użytkownicy</a>
             </li>
             <li>
-                <a href="{{route('clubs.index')}}">Koła naukowe</a>
-            </li>
-            <li>
-                <a href="{{route('sections.index')}}">Sekcje</a>
+                <a href="{{route('clubs.index')}}">Koła/sekcje</a>
             </li>
             <li>
                 <a href="{{route('clubMembers.index')}}">Członkowie kół/sekcji</a>
+            </li>
+            <li>
+                <a href="{{route('institutes.index')}}">Instytuty</a>
             </li>
             <li>
                 <a href="{{route('emails.index')}}">Emaile</a>
             </li>
         </ul>
     </nav>
+    <!-- End sidebar -->
 
+    <!-- open sidebar menu -->
+    <a class="btn btn-primary btn-customized open-menu" href="#" role="button">
+        <i class="fas fa-align-left"></i> <span>Menu</span>
+    </a>
 
   @yield('content')
 </div>
 <script src="{{ asset('js/app.js') }}" type="text/js"></script>
+
+<script src="{{ asset('js/sidebar.js') }}"></script>
+<script src="{{ asset('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
 </body>
 </html>

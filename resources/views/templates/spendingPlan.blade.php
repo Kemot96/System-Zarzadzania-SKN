@@ -44,7 +44,7 @@
     <tbody>
     @foreach($report->orders as $order)
         <tr>
-            <td></td>
+            <td>{{$loop->index+1}}</td>
             <td>{{$order->type}}</td>
             <td>{{$order->name}}</td>
             <td>{{$order->description}}</td>

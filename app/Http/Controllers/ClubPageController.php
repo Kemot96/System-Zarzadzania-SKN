@@ -12,32 +12,33 @@ use App\Notifications\RequestToJoinClub;
 use App\Notifications\SubmitReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ClubPageController extends Controller
 {
     public function mainPage(Club $club)
     {
-        $files = $club->files;
+        $files = File::latest()->where('clubs_id', $club->id)->get();
 
-        $imageFiles = array();
-        $noImageFiles = array();
-
+        $imageFiles = collect();
+        $otherFiles = collect();
 
         $imageExtensions = ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'svg', 'svgz', 'cgm', 'djv', 'djvu',
             'ico', 'ief', 'jpe', 'pbm', 'pgm', 'pnm', 'ppm', 'ras', 'rgb', 'tif', 'tiff', 'wbmp', 'xbm', 'xpm', 'xwd'];
 
         foreach ($files as $file) {
-            $explodeImage = explode('.', $file->name);
+            $explode_file_name = explode('.', $file->name);
 
-            $extension = end($explodeImage);
+            $extension = end($explode_file_name);
 
             if (in_array($extension, $imageExtensions)) {
                 $imageFiles[] = $file;
             } else {
-                $noImageFiles[] = $file;
+                $otherFiles[] = $file;
             }
         }
 
+        $imageFiles = $imageFiles->paginate(12);
         $current_academic_year_id = getCurrentAcademicYear()->id;
         $report_id = TypeOfReport::latest()->where('name', 'Sprawozdanie')->first()->id;
         $action_plan_id = TypeOfReport::latest()->where('name', 'Plan działań')->first()->id;
@@ -47,7 +48,7 @@ class ClubPageController extends Controller
         $action_plan = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $action_plan_id)->first();
         $spending_plan = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $spending_plan_id)->first();
 
-        return view('club', compact('club', 'imageFiles', 'noImageFiles', 'report', 'action_plan', 'spending_plan'));
+        return view('club', compact('club', 'imageFiles', 'otherFiles', 'report', 'action_plan', 'spending_plan'));
     }
 
     public function joinPage(Club $club)
@@ -78,13 +79,18 @@ class ClubPageController extends Controller
             'roles_id' => $role_id,
             'clubs_id' => $club_id,
             'academic_years_id' => $current_academic_year_id,
+            'removal_request' => FALSE,
         ]);
 
         $supervisor = getClubSupervisor($club);
-        $supervisor->notify(new RequestToJoinClub());
+        if($supervisor){
+            $supervisor->notify(new RequestToJoinClub());
+        }
 
         $chairman = getClubChairman($club);
-        $chairman->notify(new RequestToJoinClub());
+        if($chairman){
+            $chairman->notify(new RequestToJoinClub());
+        }
 
 
         return back();
@@ -93,24 +99,54 @@ class ClubPageController extends Controller
     public function storeFile(Request $request, Club $club)
     {
         //$this->validateStoreClub();
-
         $original_name = $request->file->getClientOriginalName();
-        $path = $request->file('file')->store('clubsFiles', 'public');
+        $path = $request->file('file')->store('clubfiles/'.$club->id, 'public');
 
         File::create([
             'name' => $path,
-            'clubs_id' => $club -> id,
-            'users_id' => Auth::user() -> id,
+            'clubs_id' => $club->id,
+            'users_id' => Auth::user()->id,
             'original_file_name' => $original_name,
         ]);
 
         return back();
     }
 
+    public function downloadFile($path)
+    {
+        $name = File::where('name', $path)->first()->original_file_name;
+        $path = 'storage/'.$path;
+        return response()->download($path, $name);
+    }
+
     public function destroyFile(Club $club, File $file)
     {
+        $this->deleteFileFromDisk($file);
+
         $file->delete();
 
         return back();
+    }
+
+    public function editDescription(Club $club)
+    {
+        return view('editClubDescription', compact('club'));
+    }
+
+    public function updateDescription(Request $request, Club $club)
+    {
+            $club->update(array(
+                'description' => $request['description'],
+            ));
+
+        return redirect()->route('club.description.edit', compact('club'))->with('status', 'Zmodyfikowano opis koła/sekcji!');
+    }
+
+
+    protected function deleteFileFromDisk(File $file)
+    {
+        if (Storage::disk('public')->exists($file->name)) {
+            Storage::disk('public')->delete($file->name);
+        }
     }
 }

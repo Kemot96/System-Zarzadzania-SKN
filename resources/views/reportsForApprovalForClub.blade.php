@@ -4,6 +4,7 @@
 
     <script src="{{ asset('/js/reportsModal.js') }} "></script>
     <div class="container">
+    {{ Breadcrumbs::render('clubReport.showReportsForApproval', $club) }}
 
     <!-- Page Content -->
     <div id="content">
@@ -75,7 +76,6 @@
             @endforeach
             </tbody>
         </table>
-        <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
     </div>
 
     <!-- Attachment Modal -->

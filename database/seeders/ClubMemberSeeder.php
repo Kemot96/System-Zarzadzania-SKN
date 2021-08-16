@@ -14,16 +14,16 @@ class ClubMemberSeeder extends Seeder
      */
     public function run()
     {
-        //TODO Nie losuj wśrod wszystkich ról, nie pozwalaj na wszystkie kombinacje id-ków (średni priorytet)
+        //TODO nie pozwalaj na wszystkie kombinacje id-ków
         for ($i = 1; $i <= 20; $i++) {
             $random_users_id = DB::table('users') -> inRandomOrder() -> value('id');
-            $random_roles_id = DB::table('roles') -> inRandomOrder() -> value('id');
+            $random_roles_id = DB::table('roles') -> where('special_role', FALSE) -> inRandomOrder() -> value('id');
             $random_clubs_id = DB::table('clubs') -> inRandomOrder() -> value('id');
             $random_academic_years_id = DB::table('academic_years') -> inRandomOrder() -> value('id');
 
 
             DB::table('club_members')->insert([
-                ['users_id' => $random_users_id, 'roles_id' => $random_roles_id, 'clubs_id' => $random_clubs_id, 'academic_years_id' => $random_academic_years_id, 'created_at' => now(), 'updated_at' => now()],
+                ['users_id' => $random_users_id, 'roles_id' => $random_roles_id, 'clubs_id' => $random_clubs_id, 'academic_years_id' => $random_academic_years_id, 'removal_request' => FALSE, 'created_at' => now(), 'updated_at' => now()],
             ]);
         }
     }

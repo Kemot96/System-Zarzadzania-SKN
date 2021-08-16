@@ -6,8 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>Basic</title>
+    <!-- CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('css/dropzone.css') }}" rel="stylesheet" type="text/css"/>
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" type="text/css"/>
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -151,6 +157,11 @@
 <main class="py-4">
     @yield('content')
 </main>
+<!-- Javascript -->
 <script src="{{ asset('js/app.js') }}" type="text/js"></script>
+
+
+<script src="{{ asset('js/sidebar.js') }}"></script>
+<script src="{{ asset('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
 </body>
 </html>

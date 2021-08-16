@@ -78,7 +78,7 @@ class EmailController extends Controller
         ));
 
 
-        return redirect('/admin/emails');
+        return redirect()->route('emails.index')->with('status', 'Zmodyfikowano treść emaila!');
     }
 
     /**

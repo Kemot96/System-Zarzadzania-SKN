@@ -21,6 +21,7 @@ class ClubMember extends Model
         'clubs_id',
         'academic_years_id',
         'removal_request',
+        'reason_to_removal',
     ];
 
     public function getCreatedAtAttribute($value)

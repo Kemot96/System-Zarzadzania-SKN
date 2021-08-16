@@ -18,11 +18,6 @@ class CreateInstitutesTable extends Migration
             $table->string('name')->unique();
             $table->timestamps();
         });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('institutes_id') ->nullable();
-            $table->foreign('institutes_id')->references('id')->on('institutes')->onDelete('cascade');
-        });
     }
 
     /**

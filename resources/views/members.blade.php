@@ -3,6 +3,7 @@
 @section('content')
     <script src="{{ asset('/js/removeMemberRequestModal.js') }} "></script>
     <div class="container">
+    {{ Breadcrumbs::render('listClubMembers.index', $club) }}
     @if($club->getLoggedUserRoleName() == 'opiekun_koła')
         <!-- Page Content -->
         <div id="content">
@@ -17,19 +18,12 @@
                 </thead>
                 <tbody>
                 @foreach($club_members as $club_member)
+                    @if($club_member->roles_id != $inactive_role_id)
                     <tr>
                         <td>{{$club_member->user->name}}</td>
                         <td>{{$club_member->role->name}}</td>
                         <td>
-                            @if($club_member->role->name == 'nieaktywny')
-                                <form action="{{ route('listClubMembers.confirm', [$club, $club_member])}}" method="post">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="btn btn-success" type="submit">Zatwierdź</button>
-                                </form>
-                            @elseif($club_member->user->id != Auth::id())
                                 <a href="{{ route('listClubMembers.edit', [$club, $club_member])}}" class="btn btn-primary">Edytuj rolę</a>
-                            @endif
                         </td>
                         <td>
                             @if($club_member->user->id != Auth::id())
@@ -41,29 +35,85 @@
                             @endif
                         </td>
                     </tr>
+                    @endif
                 @endforeach
                 </tbody>
             </table>
+
+            <div>Nieaktywni członkowie:</div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <td>Użytkownik</td>
+                    <td colspan="2">Akcje</td>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($club_members as $club_member)
+                    @if($club_member->roles_id == $inactive_role_id)
+                        <tr>
+                            <td>{{$club_member->user->name}}</td>
+                            <td>
+                                    <form action="{{ route('listClubMembers.confirm', [$club, $club_member])}}" method="post">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button class="btn btn-success" type="submit">Zatwierdź</button>
+                                    </form>
+                            </td>
+                            <td>
+                                @if($club_member->user->id != Auth::id())
+                                    <form action="{{ route('listClubMembers.destroy', [$club, $club_member])}}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Jesteś pewien?')" class="btn btn-danger" type="submit">Usuń</button>
+                                    </form>
+                                @endif
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+                </tbody>
+            </table>
+
             <div>Członkowie z wnioskiem o skreślenie:</div>
-            @foreach($club_members_with_removal_request as $club_member_with_removal_request)
-            <div>{{$club_member_with_removal_request->user->name}}</div>
-                <div><form action="{{ route('listClubMembers.destroy', [$club, $club_member_with_removal_request])}}" method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button onclick="return confirm('Jesteś pewien?')" class="btn btn-danger" type="submit">Usuń</button>
-                </form></div>
-                <div>
-                    <form action="{{ route('listClubMembers.removeRequest', [$club])}}"
-                          method="post">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" name="action" value="discardRemoveRequest">
-                        <input type="hidden" name="clubMember" value="{{$club_member_with_removal_request->id}}">
-                        <button class="btn btn-primary" type="submit">Odrzuć wniosek</button>
-                    </form>
-                </div>
-            @endforeach
-            <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <td>Użytkownik</td>
+                    <td>Rola</td>
+                    <td>Powód</td>
+                    <td colspan="2">Akcje</td>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($club_members_with_removal_request as $club_member_with_removal_request)
+                    @if($club_member->roles_id != $inactive_role_id)
+                        <tr>
+                            <td>{{$club_member_with_removal_request->user->name}}</td>
+                            <td>{{$club_member_with_removal_request->role->name}}</td>
+                            <td>{{$club_member_with_removal_request->reason_to_removal}}</td>
+                            <td>
+                                <form action="{{ route('listClubMembers.removeRequest', [$club])}}"
+                                      method="post">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="action" value="discardRemoveRequest">
+                                    <input type="hidden" name="clubMember" value="{{$club_member_with_removal_request->id}}">
+                                    <button class="btn btn-primary" type="submit">Odrzuć wniosek</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{{ route('listClubMembers.destroy', [$club, $club_member_with_removal_request])}}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button onclick="return confirm('Jesteś pewien?')" class="btn btn-danger" type="submit">Usuń</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+                </tbody>
+            </table>
         </div>
     @elseif($club->getLoggedUserRoleName() == 'przewodniczący_koła')
         <!-- Page Content -->
@@ -79,13 +129,14 @@
                 </thead>
                 <tbody>
                 @foreach($club_members as $club_member)
+                    @if($club_member->roles_id != $inactive_role_id)
                     <tr>
                         <td>{{$club_member->user->name}}</td>
                         <td>{{$club_member->role->name}}</td>
                         <td>
-                            @if($club_member->removal_request != TRUE && $club_member->user->id != Auth::id() && $club_member->roles_id != '1')
+                            @if($club_member->removal_request != TRUE && $club_member->user->id != Auth::id() && $club_member->roles_id != $supervisor_role_id)
                                 <button id="edit-item" data-toggle="modal" data-item-id="{{$club_member->id}}" class="btn btn-danger" type="button">Wniosek o skreślenie z listy członków</button>
-                            @elseif($club_member->user->id != Auth::id() && $club_member->roles_id != '1')
+                            @elseif($club_member->user->id != Auth::id() && $club_member->roles_id != $supervisor_role_id)
                                 <form action="{{ route('listClubMembers.removeRequest', [$club])}}" method="post">
                                     @csrf
                                     @method('PATCH')
@@ -97,10 +148,10 @@
                               @endif
                         </td>
                     </tr>
+                    @endif
                 @endforeach
                 </tbody>
             </table>
-            <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
         </div>
     @elseif($club->getLoggedUserRoleName() == 'członek_koła')
         <!-- Page Content -->
@@ -115,14 +166,15 @@
                     </thead>
                     <tbody>
                     @foreach($club_members as $club_member)
+                        @if($club_member->roles_id != $inactive_role_id)
                         <tr>
                             <td>{{$club_member->user->name}}</td>
                             <td>{{$club_member->role->name}}</td>
                         </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>
-                <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
             </div>
     @endif
 

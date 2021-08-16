@@ -19,6 +19,7 @@ class Club extends Model
         'name',
         'icon',
         'description',
+        'file_path',
     ];
 
 
@@ -30,11 +31,6 @@ class Club extends Model
     public function getUpdatedAtAttribute($value)
     {
         return date('d-m-Y H:i:s', strtotime($value));
-    }
-
-    public function sections()
-    {
-        return $this->hasMany(Section::class, 'clubs_id');
     }
 
     public function files()

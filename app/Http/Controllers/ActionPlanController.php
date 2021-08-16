@@ -7,6 +7,7 @@ use App\Models\Club;
 use App\Models\ClubMember;
 use App\Models\Report;
 use App\Models\Role;
+use App\Models\TypeOfReport;
 use App\Models\User;
 use App\Notifications\SubmitReport;
 use Dompdf\Dompdf;
@@ -33,13 +34,7 @@ class ActionPlanController extends Controller
 
     public function update(Request $request, Club $club, Report $report)
     {
-        $current_academic_year_id = getCurrentAcademicYear()->id;
-
         $report->update(array(
-            'users_id' => Auth::user() -> id,
-            'clubs_id' => $club -> id,
-            'academic_years_id' => $current_academic_year_id,
-            'types_id' => 2,
             'description' => $request['description'],
         ));
 
@@ -47,7 +42,7 @@ class ActionPlanController extends Controller
     }
 
 
-    public function generate(Club $club, Report $report)
+    public function generatePDF(Club $club, Report $report)
     {
         $report_description = $report->description;
         $club_name = $club->name;
@@ -56,14 +51,19 @@ class ActionPlanController extends Controller
 
         $person_name = $report->user->name;
 
-        $supervisor_role_id = Role::where('name', 'opiekun_koła')->first()->id;
-        $chairman_role_id = Role::where('name', 'przewodniczący_koła')->first()->id;
+        $chairman_name = NULL;
+        $chairman = getClubChairman($club);
+        if($chairman)
+        {
+            $chairman_name = $chairman->name;
+        }
 
-        $supervisor_id = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $supervisor_role_id)->first()->users_id;
-        $chairman_id = ClubMember::where('clubs_id', $club->id) ->where('academic_years_id', getCurrentAcademicYear()->id) -> where('roles_id', $chairman_role_id)->first()->users_id;
-
-        $supervisor_name = User::where('id', $supervisor_id)->first()->name;
-        $chairman_name = User::where('id', $chairman_id)->first()->name;
+        $supervisor_name = NULL;
+        $supervisor = getClubSupervisor($club);
+        if($supervisor)
+        {
+            $supervisor_name = $supervisor->name;
+        }
 
 
         // use the dompdf class
@@ -79,5 +79,37 @@ class ActionPlanController extends Controller
         $dompdf->render();
         // Output the generated PDF to Browser
         $dompdf->stream();
+    }
+
+    public function generateDoc(Club $club, Report $report)
+    {
+        $report_description = $report->description;
+        $club_name = $club->name;
+        $current_academic_year = getCurrentAcademicYear()->name;
+        $current_date = now()->toDateString();
+
+        $person_name = $report->user->name;
+
+        $chairman_name = NULL;
+        $chairman = getClubChairman($club);
+        if($chairman)
+        {
+            $chairman_name = $chairman->name;
+        }
+
+        $supervisor_name = NULL;
+        $supervisor = getClubSupervisor($club);
+        if($supervisor)
+        {
+            $supervisor_name = $supervisor->name;
+        }
+
+
+        // use the dompdf class
+        $content = view('templates.actionPlan', compact('club', 'report', 'report_description', 'current_academic_year', 'club_name', 'current_date', 'supervisor_name', 'chairman_name', 'person_name')) -> render();
+
+        return response($content)
+            ->header('Content-Type', 'application/vnd.ms-word')
+            ->header('Content-Disposition', 'attachment;Filename=document.doc');
     }
 }

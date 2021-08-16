@@ -45,9 +45,9 @@ class RequestToJoinClub extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->subject('Wniosek o przyjęcie w grono członków koła')
-            ->greeting('Hello!')
+            ->greeting('Szanowni Państwo,')
             ->line($message)
-            ->action('Notification Action', url(env('APP_URL')));
+            ->action('Link do strony internetowej', url(env('APP_URL')));
     }
 
     /**

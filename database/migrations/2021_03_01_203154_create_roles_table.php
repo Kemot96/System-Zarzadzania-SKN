@@ -19,11 +19,6 @@ class CreateRolesTable extends Migration
             $table->boolean('special_role');
             $table->timestamps();
         });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('roles_id')->nullable();
-            $table->foreign('roles_id')->references('id')->on('roles')->onDelete('cascade');
-        });
     }
 
     /**

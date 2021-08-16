@@ -5,6 +5,7 @@
     <script>
         Dropzone.options.dropzoneSendFiles = {
             autoProcessQueue: false,
+            dictDefaultMessage: 'Upuść tutaj pliki do przesłania',
             init: function () {
 
                 var myDropzone = this;
@@ -38,28 +39,58 @@
         }
     </script>
 
+    <!-- Sidebar -->
+    <nav class="sidebar">
+
+        <!-- close sidebar menu -->
+        <div class="dismiss">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+
+        <ul class="list-unstyled menu-elements">
+            <li>
+                <a class="scroll-link" href="{{route('listClubMembers.index', ['club' => $club])}}"><i class="bi bi-person"></i>Lista członków koła</a>
+            </li>
+            <li>
+                <a class="scroll-link" href="{{ route('clubReport.edit',[$club, $report])}}"><i class="bi bi-file-earmark-font-fill"></i>Edytuj
+                    sprawozdanie</a>
+            </li>
+            <li>
+                <a class="scroll-link" href="{{ route('clubActionPlan.edit',[$club, $action_plan])}}"><i class="bi bi-file-earmark-text-fill"></i>Edytuj
+                    plan działania</a>
+            </li>
+            <li>
+                <a class="scroll-link" href="{{ route('spendingPlan.edit',[$club, $spending_plan])}}"><i class="bi bi-file-earmark-spreadsheet-fill"></i>Edytuj plan
+                    wydatków</a>
+            </li>
+            @if($club->getLoggedUserRoleName() == 'opiekun_koła' || $club->getLoggedUserRoleName() == 'przewodniczący_koła')
+                <li>
+                    <a class="scroll-link" href="{{ route('meetings.index', $club)}}"><i class="bi bi-person-check"></i>Dziennik
+                        spotkań</a>
+                </li>
+                <li>
+                    <a class="scroll-link" href="{{ route('club.description.edit',$club)}}"><i class="bi bi-card-text"></i>Edytuj
+                        profil koła/sekcji</a>
+                </li>
+            @endif
+            @if($club->getLoggedUserRoleName() == 'opiekun_koła')
+                <li>
+                    <a class="scroll-link" href="{{route('clubReport.showReportsForApproval', ['club' => $club])}}"><i
+                            class="fas fa-home"></i>Pisma czekające na
+                        akceptację</a>
+                </li>
+            @endif
+        </ul>
+    </nav>
+    <!-- End sidebar -->
+
     <div class="container">
-        {{$club->name}}<br>
-        <a href="{{route('listClubMembers.index', ['club' => $club])}}">Lista członków koła</a><br>
-        @if($club->getLoggedUserRoleName() == 'opiekun_koła')
-            <a href="{{route('clubReport.showReportsForApproval', ['club' => $club])}}">Pisma czekające na
-                akceptację</a>
-        @endif
+        <!-- open sidebar menu -->
+        <a class="btn btn-primary btn-customized open-menu" href="#" role="button">
+            <i class="fas fa-align-left"></i> <span>Menu</span>
+        </a>
 
-        <br><a href="{{ route('clubReport.edit',[$club, $report])}}" class="btn btn-primary">Edytuj
-            sprawozdanie</a>
-
-        <br><a href="{{ route('clubActionPlan.edit',[$club, $action_plan])}}" class="btn btn-primary">Edytuj
-            plan działania</a>
-
-        <br><a href="{{ route('spendingPlan.edit',[$club, $spending_plan])}}" class="btn btn-primary">Edytuj plan
-            wydatków</a>
-
-        @if($club->getLoggedUserRoleName() == 'opiekun_koła' || $club->getLoggedUserRoleName() == 'opiekun_koła' || $club->getLoggedUserRoleName() == 'przewodniczący_koła')
-            <br><a href="{{ route('meetings.index', $club)}}" class="btn btn-primary">Dziennik spotkań</a>
-        @endif
-
-
+        {{ Breadcrumbs::render('clubMainPage', $club) }}
 
 
         <div class="card-body">
@@ -99,11 +130,12 @@
                         </div>
                     @endforeach
                 </div>
+                <div>{{ $imageFiles->links() }}</div>
             </div>
         </div>
 
 
-        @foreach($noImageFiles as $noImageFile)
+        @foreach($otherFiles as $otherFile)
             <div class="row">
                 <div class="mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -113,17 +145,17 @@
                         <path
                             d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
                     </svg>
-                    <a href="{{ route('downloadFile', ['path' => $noImageFile->name])}}">{{$noImageFile->original_file_name}}</a>
+                    <a href="{{ route('downloadFile', ['path' => $otherFile->name])}}">{{$otherFile->original_file_name}}</a>
                 </div>
                 @if (Auth::check())
-                    @if($imageFile->users_id == Auth::user()->id || Auth::user()->isAdministrator()
+                    @if($otherFile->users_id == Auth::user()->id || Auth::user()->isAdministrator()
     || $club->getLoggedUserRoleName() == 'opiekun_koła' || $club->getLoggedUserRoleName() == 'przewodniczący_koła')
                         <div>
-                            <form action="{{ route('clubMainPageFile.destroyFile', [$club, $noImageFile])}}"
+                            <form action="{{ route('clubMainPageFile.destroyFile', [$club, $otherFile])}}"
                                   method="post">
                                 @csrf
                                 @method('DELETE')
-                                <button onclick="return confirm('Jesteś pewien?')" class="btn btn-danger col-xs-3"
+                                <button onclick="return confirm('Jesteś pewien?')" class="btn btn-danger btn-sm col-xs-3"
                                         type="submit">Usuń
                                 </button>
                             </form>

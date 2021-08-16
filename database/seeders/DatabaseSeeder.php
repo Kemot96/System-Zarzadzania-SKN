@@ -19,12 +19,11 @@ class DatabaseSeeder extends Seeder
             //UserSeeder::class,
             //RoleSeeder::class,
             //ClubSeeder::class,
-            //SectionSeeder::class,
             //AcademicYearSeeder::class,
             //ClubMemberSeeder::class,
-            //SectionMemberSeeder::class,
             //TypeOfReportSeeder::class,
             EmailSeeder::class,
+            //ReportSeeder::class,
         ]);
     }
 }

@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Edytuj członka klubu') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('clubMembers.update', $clubMember->id) }}">
+                    <form method="POST" action="{{ route('clubMembers.update', [$club, $academicYear, $clubMember]) }}">
                         @method('PATCH')
                         @csrf
 
@@ -38,39 +38,19 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="clubs_id" class="col-md-4 col-form-label text-md-right">{{ __('Klub') }}</label>
+                        <div class="form-group row align-items-center">
+                            <label class="col-md-4 col-form-label text-md-right">{{ __('Koło/Sekcja') }}</label>
 
                             <div class="col-md-6">
-                                <select id="clubs_id" class="form-control @error('clubs_id') is-invalid @enderror" name="clubs_id">
-                                    @foreach($clubs as $club)
-                                        <option value="{{$club->id}}" @if($clubMember->clubs_id == $club->id) selected="selected" @endif>{{$club->name}}</option>
-                                    @endforeach
-                                </select>
-
-                                @error('clubs_id')
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                {{$club->name}}
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="academic_years_id" class="col-md-4 col-form-label text-md-right">{{ __('Rok akademicki') }}</label>
+                        <div class="form-group row align-items-center">
+                            <label class="col-md-4 col-form-label text-md-right">{{ __('Rok akademicki') }}</label>
 
                             <div class="col-md-6">
-                                <select id="academic_years_id" class="form-control @error('academic_years_id') is-invalid @enderror" name="academic_years_id">
-                                    @foreach($academic_years as $academic_year)
-                                        <option value="{{$academic_year->id}}" @if($clubMember->academic_years_id == $academic_year->id) selected="selected" @endif>{{$academic_year->name}}</option>
-                                    @endforeach
-                                </select>
-
-                                @error('academic_years_id')
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                {{$academicYear->name}}
                             </div>
                         </div>
 

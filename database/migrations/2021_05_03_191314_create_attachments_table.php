@@ -18,6 +18,7 @@ class CreateAttachmentsTable extends Migration
             $table->unsignedBigInteger('reports_id');
             $table->foreign('reports_id')->references('id')->on('reports')->onDelete('cascade');
             $table->string('name');
+            $table->string('original_file_name');
             $table->timestamps();
         });
     }

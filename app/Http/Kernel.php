@@ -66,5 +66,11 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AccessToAdminPanel::class,
         'secretariat' => \App\Http\Middleware\AccessToSecretariatPanel::class,
         'viceRector' => \App\Http\Middleware\AccessToViceRectorPanel::class,
+        'report' => \App\Http\Middleware\AllowOnlyReportIDInURL::class,
+        'spendingPlan' => \App\Http\Middleware\AllowOnlySpendingPlanIDInURL::class,
+        'actionPlan' => \App\Http\Middleware\AllowOnlyActionPlanIDInURL::class,
+        'chairman' => \App\Http\Middleware\AllowAccessToChairman::class,
+        'supervisor' => \App\Http\Middleware\AllowAccessToSupervisor::class,
+        'supervisorAndChairman' => \App\Http\Middleware\AllowAccessToSupervisorAndChairman::class,
     ];
 }

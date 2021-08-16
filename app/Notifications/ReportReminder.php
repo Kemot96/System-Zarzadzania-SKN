@@ -45,9 +45,9 @@ class ReportReminder extends Notification
 
         return (new MailMessage)
             ->subject('Przypomnienie o terminie składania sprawozdania')
-            ->greeting('Hello!')
+            ->greeting('Szanowni Państwo,')
             ->line($message)
-            ->action('Notification Action', url(env('APP_URL')));
+            ->action('Link do strony internetowej', url(env('APP_URL')));
     }
 
     /**

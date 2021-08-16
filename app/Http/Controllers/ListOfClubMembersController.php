@@ -27,7 +27,11 @@ class ListOfClubMembersController extends Controller
         $club_members_with_removal_request = ClubMember::latest()->where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year->id)
             ->where('removal_request', TRUE)->get();
 
-        return view('members', compact('club', 'club_members', 'club_members_with_removal_request'));
+        $supervisor_role_id = Role::where('name', 'opiekun_koła')->first()->id;
+
+        $inactive_role_id = Role::where('name', 'nieaktywny')->first()->id;
+
+        return view('members', compact('club', 'club_members', 'club_members_with_removal_request', 'supervisor_role_id', 'inactive_role_id'));
     }
 
     /**
@@ -121,21 +125,24 @@ class ListOfClubMembersController extends Controller
     {
         if($request -> action == "removeRequest")
         {
-            //$request["modal-input-reason"]
             $clubMember = ClubMember::find($request["modal-input-club-member-id"]);
-            $club_id = $clubMember->club->id;
             $clubMember->update(array(
                 'removal_request' => TRUE,
+                'reason_to_removal' => $request["modal-input-reason"],
             ));
 
             $supervisor = getClubSupervisor($club);
-            $supervisor->notify(new RemoveClubMemberRequest());
+            if($supervisor)
+            {
+                $supervisor->notify(new RemoveClubMemberRequest());
+            }
         }
         elseif($request -> action == "undoRemoveRequest")
         {
             $clubMember = ClubMember::find($request["clubMember"]);
             $clubMember->update(array(
                 'removal_request' => FALSE,
+                'reason_to_removal' => NULL,
             ));
         }
         elseif($request -> action == "discardRemoveRequest")
@@ -143,6 +150,7 @@ class ListOfClubMembersController extends Controller
             $clubMember = ClubMember::find($request -> clubMember);
 
             $clubMember->removal_request = FALSE;
+            $clubMember->reason_to_removal = NULL;
 
             $clubMember->save();
         }

@@ -24,6 +24,13 @@
             </tbody>
         </table>
         {{ $emails->links() }}
+
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+
         <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 
     </div>

@@ -49,7 +49,7 @@ class UserController extends Controller
             'password' => Hash::make($request['password']),
         ]);
 
-        return redirect('/admin/users');
+        return redirect()->route('users.index')->with('status', 'Dodano nowego użytkownika!');
     }
 
     /**
@@ -106,7 +106,7 @@ class UserController extends Controller
             ));
         }
 
-        return redirect('/admin/users');
+        return redirect()->route('users.index')->with('status', 'Zmodyfikowano użytkownika!');
     }
 
     /**
@@ -119,7 +119,7 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect('/admin/users');
+        return redirect()->route('users.index')->with('status', 'Usunięto użytkownika!');
     }
 
     protected function validateStoreUser()

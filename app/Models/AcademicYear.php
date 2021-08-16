@@ -34,11 +34,6 @@ class AcademicYear extends Model
         return $this->hasMany(ClubMember::class, 'academic_years_id');
     }
 
-    public function sectionMembers()
-    {
-        return $this->hasMany(SectionMember::class, 'academic_years_id');
-    }
-
     public function reports()
     {
         return $this->hasMany(Report::class, 'academic_years_id');

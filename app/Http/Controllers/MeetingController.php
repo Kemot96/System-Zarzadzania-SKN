@@ -16,9 +16,9 @@ class MeetingController extends Controller
      */
     public function index(Club $club)
     {
-        $meetings = Meeting::latest()->get();
+        $meetings = Meeting::latest()->paginate(10);
 
-        return view('meetings', compact('club', 'meetings'));
+        return view('layouts.meetings', compact('club', 'meetings'));
     }
 
     /**
@@ -32,7 +32,7 @@ class MeetingController extends Controller
 
         $club_members = ClubMember::latest()->where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year->id)->get();
 
-        $meetings = Meeting::latest()->get();
+        $meetings = Meeting::latest()->paginate(10);
 
         return view('meetingsCreate', compact('club', 'club_members', 'meetings'));
     }
@@ -45,12 +45,13 @@ class MeetingController extends Controller
      */
     public function store(Request $request, Club $club)
     {
-        //$this->validateMeeting();
+        $this->validateMeeting();
 
         Meeting::create([
             'topic' => $request['topic'],
-            'present_members' => $request['present_club_members'],
+            'present_members' => $request['present_members'],
             'clubs_id' => $club->id,
+            'supervisor_approved' => NULL,
         ]);
 
         return back();
@@ -64,7 +65,9 @@ class MeetingController extends Controller
      */
     public function show(Club $club, Meeting $meeting)
     {
-        return view('meetingsShow', compact('club', 'meeting'));
+        $meetings = Meeting::latest()->paginate(10);
+
+        return view('meetingsShow', compact('club', 'meeting', 'meetings'));
     }
 
     /**
@@ -73,9 +76,15 @@ class MeetingController extends Controller
      * @param  \App\Models\Meeting  $meeting
      * @return \Illuminate\Http\Response
      */
-    public function edit(Meeting $meeting)
+    public function edit(Club $club, Meeting $meeting)
     {
-        //
+        $current_academic_year = getCurrentAcademicYear();
+
+        $club_members = ClubMember::latest()->where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year->id)->get();
+
+        $meetings = Meeting::latest()->paginate(10);
+
+        return view('meetingsEdit', compact('club', 'meeting', 'meetings', 'club_members'));
     }
 
     /**
@@ -85,9 +94,17 @@ class MeetingController extends Controller
      * @param  \App\Models\Meeting  $meeting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Meeting $meeting)
+    public function update(Request $request, Club $club, Meeting $meeting)
     {
-        //
+        $this->validateMeeting();
+
+        $meeting->update(array(
+            'topic' => $request['topic'],
+            'present_members' => $request['present_members'],
+            'supervisor_approved' => NULL,
+        ));
+
+        return back();
     }
 
     /**
@@ -96,8 +113,44 @@ class MeetingController extends Controller
      * @param  \App\Models\Meeting  $meeting
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Meeting $meeting)
+    public function destroy(Club $club, Meeting $meeting)
     {
-        //
+        $meeting->delete();
+
+        return back();
     }
+
+    public function actionAsSupervisor(Request $request, Club $club, Meeting $meeting)
+    {
+        if($request -> action == "accept")
+        {
+            $meeting->update(array(
+                'supervisor_approved' => TRUE,
+            ));
+        }
+        else if($request -> action == "dismiss")
+        {
+            $meeting->update(array(
+                'supervisor_approved' => FALSE,
+            ));
+        }
+        else if($request -> action == "undo")
+        {
+            $meeting->update(array(
+                'supervisor_approved' => NULL,
+            ));
+        }
+
+        return back();
+    }
+
+    protected function validateMeeting()
+    {
+        return request()->validate([
+            'present_members' => 'required',
+        ]);
+    }
+
+
+
 }

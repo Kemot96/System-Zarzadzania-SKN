@@ -64,21 +64,31 @@ class ClubController extends Controller
             'clubs_id' => $club->id,
             'academic_years_id' => getCurrentAcademicYear()->id,
             'types_id' => TypeOfReport::getReportID(),
+            'supervisor_approved' => FALSE,
+            'secretariat_approved' => FALSE,
+            'vice-rector_approved' => FALSE,
         ]);
 
         Report::create([
             'clubs_id' => $club->id,
             'academic_years_id' => getCurrentAcademicYear()->id,
             'types_id' => TypeOfReport::getSpendingPlanID(),
+            'supervisor_approved' => FALSE,
+            'secretariat_approved' => FALSE,
+            'vice-rector_approved' => FALSE,
         ]);
 
         Report::create([
             'clubs_id' => $club->id,
             'academic_years_id' => getCurrentAcademicYear()->id,
             'types_id' => TypeOfReport::getActionPlanID(),
+            'supervisor_approved' => FALSE,
+            'secretariat_approved' => FALSE,
+            'vice-rector_approved' => FALSE,
+            'description' => 'Uwaga: Prosimy o przedstawienie planowanych działań w punktach',
         ]);
 
-        return redirect('/admin/clubs');
+        return redirect()->route('clubs.index')->with('status', 'Dodano nowe koło/sekcję!');
     }
 
     /**
@@ -133,7 +143,7 @@ class ClubController extends Controller
             ));
         }
 
-        return redirect('/admin/clubs');
+        return redirect()->route('clubs.index')->with('status', 'Zmodyfikowano koło/sekcję!');
     }
 
     /**
@@ -148,7 +158,7 @@ class ClubController extends Controller
 
         $club->delete();
 
-        return redirect('/admin/clubs');
+        return redirect()->route('clubs.index')->with('status', 'Usunięto koło/sekcję');
     }
 
 

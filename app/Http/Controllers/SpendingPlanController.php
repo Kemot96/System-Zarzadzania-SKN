@@ -8,6 +8,9 @@ use App\Models\Order;
 use App\Models\Report;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Html;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class SpendingPlanController extends Controller
 {
@@ -64,9 +67,8 @@ class SpendingPlanController extends Controller
     }
 
 
-    public function generate(Club $club, Report $report)
+    public function generatePDF(Club $club, Report $report)
     {
-        // use the dompdf class
         $content = view('templates.spendingPlan', compact('club', 'report')) -> render();
 
         $dompdf = new Dompdf();
@@ -81,5 +83,22 @@ class SpendingPlanController extends Controller
         $dompdf->stream();
     }
 
+    public function generateExcel(Club $club, Report $report)
+    {
+        $content = view('templates.spendingPlan', compact('club', 'report')) -> render();
 
+        $reader = new Html();
+        $spreadsheet = $reader->loadFromString($content);
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(25);
+        $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+        $spreadsheet->getActiveSheet()->getStyle('A1:G1')->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('ffffff');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="file.xls"');
+        $writer->save("php://output");
+    }
 }

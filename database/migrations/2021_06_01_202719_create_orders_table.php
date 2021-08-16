@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('type')->nullable();
-            $table->integer('quantity')->nullable();
+            $table->string('quantity')->nullable();
             $table->double('gross', 12,2)->nullable();
             $table->string('term')->nullable();
             $table->timestamps();
