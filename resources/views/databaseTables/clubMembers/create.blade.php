@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dodaj członka klubu') }}</div>
+                <div class="card-header">{{ __('Dodaj członka koła/sekcji') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('clubMembers.store', [$club, $academicYear]) }}">

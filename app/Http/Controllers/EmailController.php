@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Email;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class EmailController extends Controller
 {
@@ -71,7 +72,7 @@ class EmailController extends Controller
      */
     public function update(Request $request, Email $email)
     {
-        //$this->validateUpdateEmail($email);
+        $this->validateUpdateEmail();
 
         $email->update(array(
             'message' => $request['message'],
@@ -90,5 +91,12 @@ class EmailController extends Controller
     public function destroy(Email $email)
     {
         //
+    }
+
+    protected function validateUpdateEmail()
+    {
+        return request()->validate([
+            'message' => 'required|string',
+        ]);
     }
 }

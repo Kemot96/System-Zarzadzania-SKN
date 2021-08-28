@@ -5,11 +5,11 @@
         <div>Temat: {{$meeting->topic}}</div>
         <div>Data: {{$meeting->created_at}}</div>
         @if(!isset($meeting->supervisor_approved))
-            <div>Status: Rozpatrywane przez opiekuna</div>
+            <div class="text-info font-weight-bold">Status: Rozpatrywane przez opiekuna</div>
         @elseif($meeting->supervisor_approved == TRUE)
-            <div>Status: Zaakceptowane</div>
+            <div class="text-success font-weight-bold">Status: Zaakceptowane</div>
         @elseif($meeting->supervisor_approved == FALSE)
-            <div>Status: Odrzucone</div>
+            <div class="text-danger font-weight-bold">Status: Odrzucone</div>
         @endif
         <div>Lista członków spotkania:</div>
         @foreach($meeting->present_members as $present_member)
@@ -50,10 +50,3 @@
         </div>
     </div>
 @endsection
-
-
-
-
-
-
-

@@ -40,6 +40,44 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="roles_id" class="col-md-4 col-form-label text-md-right">{{ __('Rola') }}</label>
+
+                            <div class="col-md-6">
+                                <select id="roles_id" class="form-control @error('roles_id') is-invalid @enderror" name="roles_id">
+                                    <option value=""></option>
+                                    @foreach($roles as $role)
+                                        <option value="{{$role->id}}">{{$role->name}}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('clubs_id')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="institutes_id" class="col-md-4 col-form-label text-md-right">{{ __('Instytut') }}</label>
+
+                            <div class="col-md-6">
+                                <select id="institutes_id" class="form-control @error('institutes_id') is-invalid @enderror" name="institutes_id">
+                                    <option value=""></option>
+                                    @foreach($institutes as $institute)
+                                        <option value="{{$institute->id}}">{{$institute->name}}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('institutes_id')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Hasło') }}</label>
 
                             <div class="col-md-6">

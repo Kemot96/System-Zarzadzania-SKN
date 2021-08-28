@@ -30,7 +30,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('databaseTables.users.create');
+        $institutes = Institute::latest()->get();
+        $roles = Role::latest()->where('special_role', '1')->get();
+
+        return view('databaseTables.users.create', compact('institutes', 'roles'));
     }
 
     /**
@@ -47,6 +50,8 @@ class UserController extends Controller
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
+            'roles_id' => $request['roles_id'],
+            'institutes_id' => $request['institutes_id'],
         ]);
 
         return redirect()->route('users.index')->with('status', 'Dodano nowego użytkownika!');
@@ -128,6 +133,8 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'roles_id' => 'nullable|exists:App\Models\Role,id,special_role,1',
+            'institutes_id' => 'nullable|exists:App\Models\Institute,id',
         ]);
     }
 

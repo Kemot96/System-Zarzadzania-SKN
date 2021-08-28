@@ -80,6 +80,11 @@
                         akceptację</a>
                 </li>
             @endif
+
+            <li>
+                <a class="scroll-link" href="{{route('clubMainPage.previewProfile', ['club' => $club])}}"><i
+                        class="bi bi-file-text"></i>Podgląd profilu koła/sekcji</a>
+            </li>
         </ul>
     </nav>
     <!-- End sidebar -->

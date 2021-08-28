@@ -31,6 +31,8 @@ class ReportController extends Controller
 
     public function update(Request $request, Club $club, Report $report)
     {
+        $this->validateUpdateReport();
+
         $report->update(array(
             'description' => $request['description'],
         ));
@@ -107,5 +109,12 @@ class ReportController extends Controller
         return response($content)
             ->header('Content-Type', 'application/vnd.ms-word')
             ->header('Content-Disposition', 'attachment;Filename=document.doc');
+    }
+
+    protected function validateUpdateReport()
+    {
+        return request()->validate([
+            'description' => 'nullable|string',
+        ]);
     }
 }

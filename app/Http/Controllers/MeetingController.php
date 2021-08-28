@@ -16,7 +16,7 @@ class MeetingController extends Controller
      */
     public function index(Club $club)
     {
-        $meetings = Meeting::latest()->paginate(10);
+        $meetings = Meeting::latest()->where('clubs_id', $club->id)->paginate(10);
 
         return view('layouts.meetings', compact('club', 'meetings'));
     }
@@ -32,7 +32,7 @@ class MeetingController extends Controller
 
         $club_members = ClubMember::latest()->where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year->id)->get();
 
-        $meetings = Meeting::latest()->paginate(10);
+        $meetings = Meeting::latest()->where('clubs_id', $club->id)->paginate(10);
 
         return view('meetingsCreate', compact('club', 'club_members', 'meetings'));
     }
@@ -54,7 +54,9 @@ class MeetingController extends Controller
             'supervisor_approved' => NULL,
         ]);
 
-        return back();
+        $meetings = Meeting::latest()->where('clubs_id', $club->id)->paginate(10);
+
+        return view('layouts.meetings', compact('club', 'meetings'));
     }
 
     /**
@@ -65,7 +67,7 @@ class MeetingController extends Controller
      */
     public function show(Club $club, Meeting $meeting)
     {
-        $meetings = Meeting::latest()->paginate(10);
+        $meetings = Meeting::latest()->where('clubs_id', $club->id)->paginate(10);
 
         return view('meetingsShow', compact('club', 'meeting', 'meetings'));
     }
@@ -82,7 +84,7 @@ class MeetingController extends Controller
 
         $club_members = ClubMember::latest()->where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year->id)->get();
 
-        $meetings = Meeting::latest()->paginate(10);
+        $meetings = Meeting::latest()->where('clubs_id', $club->id)->paginate(10);
 
         return view('meetingsEdit', compact('club', 'meeting', 'meetings', 'club_members'));
     }
@@ -104,7 +106,9 @@ class MeetingController extends Controller
             'supervisor_approved' => NULL,
         ));
 
-        return back();
+        $meetings = Meeting::latest()->where('clubs_id', $club->id)->paginate(10);
+
+        return view('meetingsShow', compact('club', 'meeting', 'meetings'));
     }
 
     /**
@@ -117,7 +121,9 @@ class MeetingController extends Controller
     {
         $meeting->delete();
 
-        return back();
+        $meetings = Meeting::latest()->where('clubs_id', $club->id)->paginate(10);
+
+        return view('layouts.meetings', compact('club', 'meetings'));
     }
 
     public function actionAsSupervisor(Request $request, Club $club, Meeting $meeting)

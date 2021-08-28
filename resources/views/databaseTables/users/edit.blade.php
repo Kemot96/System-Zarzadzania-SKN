@@ -60,10 +60,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="roles_id" class="col-md-4 col-form-label text-md-right">{{ __('Instytut') }}</label>
+                            <label for="institutes_id" class="col-md-4 col-form-label text-md-right">{{ __('Instytut') }}</label>
 
                             <div class="col-md-6">
-                                <select id="roles_id" class="form-control @error('institutes_id') is-invalid @enderror" name="institutes_id">
+                                <select id="institutes_id" class="form-control @error('institutes_id') is-invalid @enderror" name="institutes_id">
                                     <option value=""></option>
                                     @foreach($institutes as $institute)
                                         <option value="{{$institute->id}}" @if($user->institutes_id == $institute->id) selected="selected" @endif>{{$institute->name}}</option>

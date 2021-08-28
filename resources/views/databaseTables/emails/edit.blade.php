@@ -16,7 +16,7 @@
                             <label for="message" class="col-md-4 col-form-label text-md-right">{{ __('Treść') }}</label>
 
                             <div class="col-md-6">
-                                <input id="message" type="text" class="form-control @error('message') is-invalid @enderror" name="message" value="{{ $email->message }}" required autocomplete="off" autofocus>
+                                <textarea id="message" type="text" class="form-control @error('message') is-invalid @enderror" name="message" required autocomplete="off" autofocus>{{ $email->message }}</textarea>
 
                                 @error('message')
                                 <span class="invalid-feedback" role="alert">

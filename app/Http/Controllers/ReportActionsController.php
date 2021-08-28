@@ -29,13 +29,26 @@ class ReportActionsController extends Controller
                 ]);
             }
 
-            $report->update(array(
-                'users_id' => Auth::user()->id,
-            ));
+            if ($club->getLoggedUserRoleName() == 'opiekun_koła') {
+                $report->update(array(
+                    'users_id' => Auth::user()->id,
+                    'supervisor_approved' => true,
+                ));
 
-            $supervisor = getClubSupervisor($club);
-            if ($supervisor) {
-                $supervisor->notify(new SubmitReport());
+                $secretariat_id = Role::where('name', 'sekretariat_prorektora')->value('id');
+                $secretariat_users = User::where('roles_id', $secretariat_id)->get();
+                foreach ($secretariat_users as $secretariat) {
+                    $secretariat->notify(new SubmitReport());
+                }
+            } else {
+                $report->update(array(
+                    'users_id' => Auth::user()->id,
+                ));
+
+                $supervisor = getClubSupervisor($club);
+                if ($supervisor) {
+                    $supervisor->notify(new SubmitReport());
+                }
             }
 
         } elseif ($request->action == "undo") {
@@ -104,6 +117,8 @@ class ReportActionsController extends Controller
                 $secretariat->notify(new SubmitReport());
             }
         } else if ($request->action == "dismiss") {
+            $this->validateReportRemarks();
+
             $report->update(array(
                 'remarks' => $request["modal-input-remarks"],
                 'supervisor_approved' => false,
@@ -138,6 +153,8 @@ class ReportActionsController extends Controller
                 $vice_rector->notify(new SubmitReport());
             }
         } else if ($request->action == "dismiss") {
+            $this->validateReportRemarks();
+
             $report->update(array(
                 'remarks' => $request["modal-input-remarks"],
                 'secretariat_approved' => false,
@@ -173,6 +190,8 @@ class ReportActionsController extends Controller
                 'vice-rector_approved' => true,
             ));
         } else if ($request->action == "dismiss") {
+            $this->validateReportRemarks();
+
             $report->update(array(
                 'remarks' => $request["modal-input-remarks"],
                 'vice-rector_approved' => false,
@@ -213,5 +232,12 @@ class ReportActionsController extends Controller
         if (Storage::disk('public')->exists($attachment_path)) {
             Storage::disk('public')->delete($attachment_path);
         }
+    }
+
+    protected function validateReportRemarks()
+    {
+        return request()->validate([
+            'modal-input-remarks' => 'nullable|string',
+        ]);
     }
 }

@@ -42,7 +42,7 @@
               </div>
           @endif
 
-          <a href="{{ route('clubs.create')}}" class="btn btn-success">Dodaj klub</a>
+          <a href="{{ route('clubs.create')}}" class="btn btn-success">Dodaj koło/sekcję</a>
           <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 
       </div>

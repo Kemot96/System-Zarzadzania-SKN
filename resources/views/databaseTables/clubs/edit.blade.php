@@ -17,7 +17,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Edytuj klub') }}</div>
+                <div class="card-header">{{ __('Edytuj koło/sekcję') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('clubs.update', $club->id) }}" enctype="multipart/form-data">
@@ -68,7 +68,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Edytuj klub') }}
+                                    {{ __('Edytuj koło/sekcję') }}
                                 </button>
                             </div>
                         </div>

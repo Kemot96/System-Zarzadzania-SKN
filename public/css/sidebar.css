@@ -29,11 +29,6 @@
 
 .sidebar ul li a i { margin-right: 5px; }
 
-.sidebar ul li.active > a, a[aria-expanded="true"] {
-    background: #444;
-    color: #fff;
-}
-
 .sidebar ul ul a { background: #444; padding-left: 30px; font-size: 14px; }
 
 .sidebar ul ul li.active > a { background: #555; }

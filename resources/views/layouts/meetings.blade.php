@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
+        {{ Breadcrumbs::render('meetings.index', $club) }}
         <div class="row">
         <div class="col-4">
-            {{ Breadcrumbs::render('meetings.index', $club) }}
         @foreach($meetings as $meeting)
             <a href="{{ route('meetings.show', [$club, $meeting])}}">{{$meeting->topic}} {{$meeting->created_at}}</a><br>
         @endforeach

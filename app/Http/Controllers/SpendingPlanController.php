@@ -16,6 +16,8 @@ class SpendingPlanController extends Controller
 {
     public function store(Request $request, Club $club, Report $report)
     {
+        $this->validateOrder();
+
         Order::create([
             'reports_id' => $report->id,
             'name' => $request['name'],
@@ -46,6 +48,8 @@ class SpendingPlanController extends Controller
 
     public function update(Request $request, Club $club, Report $report, Order $order)
     {
+        $this->validateOrder();
+
         $order->update(array(
             'reports_id' => $report->id,
             'name' => $request['name'],
@@ -100,5 +104,17 @@ class SpendingPlanController extends Controller
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment; filename="file.xls"');
         $writer->save("php://output");
+    }
+
+    protected function validateOrder()
+    {
+        return request()->validate([
+            'name' => 'required|string',
+            'description' => 'nullable|string',
+            'type' => 'nullable|string',
+            'quantity' => 'nullable|string',
+            'gross' => 'nullable|numeric',
+            'term' => 'nullable|string',
+        ]);
     }
 }

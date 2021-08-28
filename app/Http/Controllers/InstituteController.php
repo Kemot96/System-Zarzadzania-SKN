@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Institute;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class InstituteController extends Controller
 {
@@ -37,6 +38,8 @@ class InstituteController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validateStoreInstitute();
+
         Institute::create([
             'name' => $request['name'],
         ]);
@@ -75,6 +78,8 @@ class InstituteController extends Controller
      */
     public function update(Request $request, Institute $institute)
     {
+        $this->validateUpdateInstitute($institute);
+
         $institute->update(array(
             'name' => $request['name'],
         ));
@@ -93,5 +98,22 @@ class InstituteController extends Controller
         $institute->delete();
 
         return redirect()->route('institutes.index')->with('status', 'Usunięto instytut!');
+    }
+
+    protected function validateStoreInstitute()
+    {
+        return request()->validate([
+            'name' => 'required|unique:institutes|string|max:255',
+        ]);
+    }
+
+    protected function validateUpdateInstitute($institute)
+    {
+        return request()->validate([
+            'name' => ['required',
+                'string',
+                'max:255',
+                Rule::unique('institutes')->ignore($institute->id)],
+        ]);
     }
 }

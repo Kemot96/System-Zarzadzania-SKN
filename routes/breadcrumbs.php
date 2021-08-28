@@ -60,3 +60,15 @@ Breadcrumbs::for('meetings.index', function (BreadcrumbTrail $trail, $club) {
     $trail->parent('clubMainPage', $club);
     $trail->push('Dziennik spotkań', route('meetings.index', $club));
 });
+
+// Index > Club > Description
+Breadcrumbs::for('club.description.edit', function (BreadcrumbTrail $trail, $club) {
+    $trail->parent('clubMainPage', $club);
+    $trail->push('Opis koła/sekcji', route('club.description.edit', $club));
+});
+
+// Index > Club > Profile
+Breadcrumbs::for('clubMainPage.previewProfile', function (BreadcrumbTrail $trail, $club) {
+    $trail->parent('clubMainPage', $club);
+    $trail->push('Profil', route('clubMainPage.previewProfile', $club));
+});

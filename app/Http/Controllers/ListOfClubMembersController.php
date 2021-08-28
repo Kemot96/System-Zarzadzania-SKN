@@ -88,7 +88,7 @@ class ListOfClubMembersController extends Controller
      */
     public function update(Request $request, Club $club, ClubMember $clubMember)
     {
-        //$this->validateUpdateClubMember();
+        $this->validateUpdateClubMember();
 
         $clubMember->update(array(
             'roles_id' => $request['roles_id'],
@@ -112,8 +112,6 @@ class ListOfClubMembersController extends Controller
 
     public function confirm(Request $request, Club $club, ClubMember $clubMember)
     {
-        //$this->validateUpdateClubMember();
-
         $clubMember->update(array(
             'roles_id' => Role::where('name', 'członek_koła')->first()->id,
         ));
@@ -126,6 +124,9 @@ class ListOfClubMembersController extends Controller
         if($request -> action == "removeRequest")
         {
             $clubMember = ClubMember::find($request["modal-input-club-member-id"]);
+
+            $this->validateRemoveRequest();
+
             $clubMember->update(array(
                 'removal_request' => TRUE,
                 'reason_to_removal' => $request["modal-input-reason"],
@@ -155,5 +156,19 @@ class ListOfClubMembersController extends Controller
             $clubMember->save();
         }
         return back();
+    }
+
+    protected function validateUpdateClubMember()
+    {
+        return request()->validate([
+            'roles_id' => 'required|exists:App\Models\Role,id,special_role,0',
+        ]);
+    }
+
+    protected function validateRemoveRequest()
+    {
+        return request()->validate([
+            'modal-input-reason' => 'nullable|string',
+        ]);
     }
 }

@@ -55,6 +55,7 @@ Route::middleware(['auth', 'club.access'])->group(function () {
     Route::get('/{club:name}', [App\Http\Controllers\ClubPageController::class, 'mainPage'])->name('clubMainPage');
     Route::post('/{club:name}', [App\Http\Controllers\ClubPageController::class, 'storeFile'])->name('clubMainPageFile.store');
     Route::delete('/{club:name}/{file}', [App\Http\Controllers\ClubPageController::class, 'destroyFile'])->name('clubMainPageFile.destroyFile');
+    Route::get('/{club:name}/profil', [App\Http\Controllers\ClubPageController::class, 'previewProfile'])->name('clubMainPage.previewProfile');
 
     Route::middleware(['supervisorAndChairman'])->group(function () {
     Route::get('/{club:name}/dziennik-spotkan', [App\Http\Controllers\MeetingController::class, 'index'])->name('meetings.index');

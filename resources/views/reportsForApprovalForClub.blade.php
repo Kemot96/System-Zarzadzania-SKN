@@ -90,14 +90,11 @@
                         <input type="hidden" name="modal-input-report-id" id="modal-input-report-id4">
 
                         <div class="card text-white bg-dark mb-0">
-                            <div class="card-header">
-                                <h2 class="m-0">Edit</h2>
-                            </div>
                             <div class="card-body">
                                 <!-- remarks -->
                                 <div class="form-group">
                                     <label class="col-form-label" for="modal-input-remarks">Uwagi</label>
-                                    <input type="text" name="modal-input-remarks" class="form-control" id="modal-input-remarks">
+                                    <textarea type="text" name="modal-input-remarks" class="form-control" id="modal-input-remarks"></textarea>
                                 </div>
                                 <!-- /remarks -->
                             </div>

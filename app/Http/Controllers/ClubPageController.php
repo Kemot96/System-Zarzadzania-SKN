@@ -51,6 +51,11 @@ class ClubPageController extends Controller
         return view('club', compact('club', 'imageFiles', 'otherFiles', 'report', 'action_plan', 'spending_plan'));
     }
 
+    public function previewProfile(Club $club)
+    {
+        return view('previewClubProfile', compact('club'));
+    }
+
     public function joinPage(Club $club)
     {
         $request_to_join_send = false;
@@ -70,10 +75,6 @@ class ClubPageController extends Controller
         $role_id = Role::latest()->find(1)->where('name', 'nieaktywny')->first()->id;
         $current_academic_year_id = getCurrentAcademicYear()->id;
 
-        //$this->validateJoinClubMember();
-
-
-
         ClubMember::create([
             'users_id' => $user_id,
             'roles_id' => $role_id,
@@ -83,12 +84,12 @@ class ClubPageController extends Controller
         ]);
 
         $supervisor = getClubSupervisor($club);
-        if($supervisor){
+        if ($supervisor) {
             $supervisor->notify(new RequestToJoinClub());
         }
 
         $chairman = getClubChairman($club);
-        if($chairman){
+        if ($chairman) {
             $chairman->notify(new RequestToJoinClub());
         }
 
@@ -98,9 +99,8 @@ class ClubPageController extends Controller
 
     public function storeFile(Request $request, Club $club)
     {
-        //$this->validateStoreClub();
         $original_name = $request->file->getClientOriginalName();
-        $path = $request->file('file')->store('clubfiles/'.$club->id, 'public');
+        $path = $request->file('file')->store('clubfiles/' . $club->id, 'public');
 
         File::create([
             'name' => $path,
@@ -115,7 +115,7 @@ class ClubPageController extends Controller
     public function downloadFile($path)
     {
         $name = File::where('name', $path)->first()->original_file_name;
-        $path = 'storage/'.$path;
+        $path = 'storage/' . $path;
         return response()->download($path, $name);
     }
 
@@ -135,9 +135,11 @@ class ClubPageController extends Controller
 
     public function updateDescription(Request $request, Club $club)
     {
-            $club->update(array(
-                'description' => $request['description'],
-            ));
+        $this->validateUpdateDescription();
+
+        $club->update(array(
+            'description' => $request['description'],
+        ));
 
         return redirect()->route('club.description.edit', compact('club'))->with('status', 'Zmodyfikowano opis koła/sekcji!');
     }
@@ -148,5 +150,12 @@ class ClubPageController extends Controller
         if (Storage::disk('public')->exists($file->name)) {
             Storage::disk('public')->delete($file->name);
         }
+    }
+
+    protected function validateUpdateDescription()
+    {
+        return request()->validate([
+            'description' => 'nullable|string',
+        ]);
     }
 }
