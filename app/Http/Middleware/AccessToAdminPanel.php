@@ -19,7 +19,7 @@ class AccessToAdminPanel
     {
         if(Auth::check())
         {
-            if(Auth::user()->isAdministrator())
+            if(Auth::user()->isAdministrator() || Auth::user()->isSecretariat() || Auth::user()->isViceRector())
             {
                 return $next($request);
             }

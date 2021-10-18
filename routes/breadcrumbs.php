@@ -19,6 +19,12 @@ Breadcrumbs::for('clubMainPage', function (BreadcrumbTrail $trail, $club) {
     $trail->push($club->name, route('clubMainPage', $club));
 });
 
+// Index > Club > Files
+Breadcrumbs::for('clubFilesPage', function (BreadcrumbTrail $trail, $club) {
+    $trail->parent('clubMainPage', $club);
+    $trail->push('Pliki', route('clubFilesPage', $club));
+});
+
 // Index > Club > Members
 Breadcrumbs::for('listClubMembers.index', function (BreadcrumbTrail $trail, $club) {
     $trail->parent('clubMainPage', $club);
@@ -37,21 +43,39 @@ Breadcrumbs::for('clubReport.showReportsForApproval', function (BreadcrumbTrail 
     $trail->push('Pisma do akceptacji', route('clubReport.showReportsForApproval', $club));
 });
 
-// Index > Club > Report
-Breadcrumbs::for('clubReport.edit', function (BreadcrumbTrail $trail, $club, $report) {
+// Index > Club > ReportMenu
+Breadcrumbs::for('clubReport.menu', function (BreadcrumbTrail $trail, $club) {
     $trail->parent('clubMainPage', $club);
+    $trail->push('Sprawozdania', route('clubReport.menu', $club));
+});
+
+// Index > Club > ReportMenu > Report
+Breadcrumbs::for('clubReport.edit', function (BreadcrumbTrail $trail, $club, $report) {
+    $trail->parent('clubReport.menu', $club);
     $trail->push('Sprawozdanie', route('clubReport.edit', [$club, $report]));
 });
 
-// Index > Club > Action Plan
-Breadcrumbs::for('clubActionPlan.edit', function (BreadcrumbTrail $trail, $club, $report) {
+// Index > Club > ActionPlanMenu
+Breadcrumbs::for('clubActionPlan.menu', function (BreadcrumbTrail $trail, $club) {
     $trail->parent('clubMainPage', $club);
+    $trail->push('Plany działań', route('clubActionPlan.menu', $club));
+});
+
+// Index > Club > ActionPlanMenu > Action Plan
+Breadcrumbs::for('clubActionPlan.edit', function (BreadcrumbTrail $trail, $club, $report) {
+    $trail->parent('clubActionPlan.menu', $club);
     $trail->push('Plan działań', route('clubActionPlan.edit', [$club, $report]));
 });
 
-// Index > Club > Spending Plan
-Breadcrumbs::for('spendingPlan.edit', function (BreadcrumbTrail $trail, $club, $report) {
+// Index > Club > SpendingPlanMenu
+Breadcrumbs::for('spendingPlan.menu', function (BreadcrumbTrail $trail, $club) {
     $trail->parent('clubMainPage', $club);
+    $trail->push('Plany wydatków', route('spendingPlan.menu', $club));
+});
+
+// Index > Club SpendingPlanMenu > Spending Plan
+Breadcrumbs::for('spendingPlan.edit', function (BreadcrumbTrail $trail, $club, $report) {
+    $trail->parent('spendingPlan.menu', $club);
     $trail->push('Plan wydatków', route('spendingPlan.edit', [$club, $report]));
 });
 

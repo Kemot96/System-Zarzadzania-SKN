@@ -59,32 +59,22 @@ class ClubController extends Controller
             'icon' => $path,
         ]);
 
-
         Report::create([
             'clubs_id' => $club->id,
             'academic_years_id' => getCurrentAcademicYear()->id,
             'types_id' => TypeOfReport::getReportID(),
-            'supervisor_approved' => FALSE,
-            'secretariat_approved' => FALSE,
-            'vice-rector_approved' => FALSE,
         ]);
 
         Report::create([
             'clubs_id' => $club->id,
             'academic_years_id' => getCurrentAcademicYear()->id,
             'types_id' => TypeOfReport::getSpendingPlanID(),
-            'supervisor_approved' => FALSE,
-            'secretariat_approved' => FALSE,
-            'vice-rector_approved' => FALSE,
         ]);
 
         Report::create([
             'clubs_id' => $club->id,
             'academic_years_id' => getCurrentAcademicYear()->id,
             'types_id' => TypeOfReport::getActionPlanID(),
-            'supervisor_approved' => FALSE,
-            'secretariat_approved' => FALSE,
-            'vice-rector_approved' => FALSE,
             'description' => 'Uwaga: Prosimy o przedstawienie planowanych działań w punktach',
         ]);
 

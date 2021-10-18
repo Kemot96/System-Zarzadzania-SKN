@@ -18,6 +18,20 @@ class ClubPageController extends Controller
 {
     public function mainPage(Club $club)
     {
+        $current_academic_year_id = getCurrentAcademicYear()->id;
+        $report_id = TypeOfReport::latest()->where('name', 'Sprawozdanie')->first()->id;
+        $action_plan_id = TypeOfReport::latest()->where('name', 'Plan działań')->first()->id;
+        $spending_plan_id = TypeOfReport::latest()->where('name', 'Plan wydatków')->first()->id;
+
+        $report = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $report_id)->first();
+        $action_plan = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $action_plan_id)->first();
+        $spending_plan = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $spending_plan_id)->first();
+
+        return view('club', compact('club', 'report', 'action_plan', 'spending_plan'));
+    }
+
+    public function filesPage(Club $club)
+    {
         $files = File::latest()->where('clubs_id', $club->id)->get();
 
         $imageFiles = collect();
@@ -39,16 +53,8 @@ class ClubPageController extends Controller
         }
 
         $imageFiles = $imageFiles->paginate(12);
-        $current_academic_year_id = getCurrentAcademicYear()->id;
-        $report_id = TypeOfReport::latest()->where('name', 'Sprawozdanie')->first()->id;
-        $action_plan_id = TypeOfReport::latest()->where('name', 'Plan działań')->first()->id;
-        $spending_plan_id = TypeOfReport::latest()->where('name', 'Plan wydatków')->first()->id;
 
-        $report = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $report_id)->first();
-        $action_plan = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $action_plan_id)->first();
-        $spending_plan = Report::where('clubs_id', $club->id)->where('academic_years_id', $current_academic_year_id)->where('types_id', $spending_plan_id)->first();
-
-        return view('club', compact('club', 'imageFiles', 'otherFiles', 'report', 'action_plan', 'spending_plan'));
+        return view('clubFiles', compact('club', 'imageFiles', 'otherFiles'));
     }
 
     public function previewProfile(Club $club)

@@ -11,7 +11,8 @@
     <link href="{{ asset('css/dropzone.css') }}" rel="stylesheet" type="text/css"/>
 
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}" type="text/css"/>
     <link rel="stylesheet" href="{{ asset('css/jquery.mCustomScrollbar.min.css') }}" type="text/css"/>
 
@@ -69,12 +70,38 @@
             padding-bottom: 30px;
         }
 
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            margin-bottom: 100px; /* Margin bottom by footer height */
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #eff2f4;
+            color: #555;
+            padding: 15px 0 15px;
+        }
+
+
     </style>
 
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container">
+        <a class="navbar-brand">
+        <img src="{{ asset('storage/images/orzel.svg') }}" alt="Rzeczpospolita Polska (godło)">
+        </a>
+
+            <a class="navbar-brand" href="https://pwsz.elblag.pl">
+        <img width="146" height="54" src="{{ asset('storage/images/logo-pwsz-www.png') }}" alt="PWSZ w Elblągu (logo))">
+            </a>
 
         <a class="navbar-brand" href="{{ url('/') }}">
             Strona główna
@@ -91,7 +118,7 @@
             <ul class="navbar-nav mr-auto">
                 @if (Route::has('login'))
                     @if (Auth::check())
-                        @if(Auth::user()->isAdministrator())
+                        @if(Auth::user()->isAdministrator() || Auth::user()->isSecretariat() || Auth::user()->isViceRector())
                             <li class="nav-item"><a href="{{ url('/admin/users') }}"
                                                     class="nav-link text-sm text-gray-700 underline">Panel
                                     administatora</a>
@@ -156,6 +183,19 @@
 
 <main class="py-4">
     @yield('content')
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12 text-center">{{ __('© 2018 Państwowa Wyższa Szkoła Zawodowa w Elblągu') }}</div>
+                <div class="col-sm-2 col-xs-12 text-center"><b>{{ __('ISO 9001') }}</b></div>
+                <div class="col-sm-4 col-xs-12 text-center"><a href="http://bip.pwsz.elblag.pl/" target="_blank">{{ __('Biuletyn
+                        Informacji Publicznej') }} <img class="show_inline" src="{{ asset('storage/images/ico-bip.png') }}"
+                                                   alt="BIP: Biuletyn Informacji Publicznej"><span class="sr-only">otwiera się w nowym oknie</span></a>
+                </div>
+            </div>
+        </div> <!-- container -->
+    </footer>
 </main>
 <!-- Javascript -->
 <script src="{{ asset('js/app.js') }}" type="text/js"></script>

@@ -40,6 +40,30 @@ class ReportController extends Controller
         return back();
     }
 
+    public function menu(Club $club)
+    {
+        $reports = Report::where('clubs_id', $club->id)->where('academic_years_id', '!=', getCurrentAcademicYear()->id)->where('types_id', TypeOfReport::getReportID())->orderBy('academic_years_id', 'desc')->get();
+
+        $report = Report::where('clubs_id', $club->id)->where('academic_years_id', getCurrentAcademicYear()->id)->where('types_id', TypeOfReport::getReportID())->first();
+
+        return view('clubReports', compact('club', 'reports', 'report'));
+    }
+
+    public function show(Club $club, Report $report)
+    {
+        $send_reports_ids = Attachment::pluck('reports_id')->all();
+
+        if (in_array($report->id, $send_reports_ids))
+        {
+            $attachments_send = TRUE;
+        }
+        else{
+            $attachments_send = FALSE;
+        }
+
+        return view('reportArchive', compact('club', 'report', 'attachments_send'));
+    }
+
     public function generatePDF(Club $club, Report $report)
     {
         $report_description = $report->description;

@@ -6,6 +6,7 @@ use App\Models\Attachment;
 use App\Models\Club;
 use App\Models\Order;
 use App\Models\Report;
+use App\Models\TypeOfReport;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -61,6 +62,30 @@ class SpendingPlanController extends Controller
         ));
 
         return back();
+    }
+
+    public function menu(Club $club)
+    {
+        $spending_plans = Report::where('clubs_id', $club->id)->where('academic_years_id', '!=', getCurrentAcademicYear()->id)->where('types_id', TypeOfReport::getSpendingPlanID())->orderBy('academic_years_id', 'desc')->get();
+
+        $spending_plan = Report::where('clubs_id', $club->id)->where('academic_years_id', getCurrentAcademicYear()->id)->where('types_id', TypeOfReport::getSpendingPlanID())->first();
+
+        return view('clubSpendingPlans', compact('club', 'spending_plans', 'spending_plan'));
+    }
+
+    public function show(Club $club, Report $report)
+    {
+        $send_reports_ids = Attachment::pluck('reports_id')->all();
+
+        if (in_array($report->id, $send_reports_ids))
+        {
+            $attachments_send = TRUE;
+        }
+        else{
+            $attachments_send = FALSE;
+        }
+
+        return view('spendingPlansArchive', compact('club', 'report', 'attachments_send'));
     }
 
     public function destroy(Club $club, Report $report, Order $order)

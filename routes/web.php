@@ -53,9 +53,12 @@ Route::patch('prorektor/pisma-do-akceptacji', [App\Http\Controllers\ReportAction
 
 Route::middleware(['auth', 'club.access'])->group(function () {
     Route::get('/{club:name}', [App\Http\Controllers\ClubPageController::class, 'mainPage'])->name('clubMainPage');
-    Route::post('/{club:name}', [App\Http\Controllers\ClubPageController::class, 'storeFile'])->name('clubMainPageFile.store');
-    Route::delete('/{club:name}/{file}', [App\Http\Controllers\ClubPageController::class, 'destroyFile'])->name('clubMainPageFile.destroyFile');
     Route::get('/{club:name}/profil', [App\Http\Controllers\ClubPageController::class, 'previewProfile'])->name('clubMainPage.previewProfile');
+
+    Route::get('/{club:name}/pliki', [App\Http\Controllers\ClubPageController::class, 'filesPage'])->name('clubFilesPage');
+    Route::post('/{club:name}/pliki', [App\Http\Controllers\ClubPageController::class, 'storeFile'])->name('clubFilesPageFile.store');
+    Route::delete('/{club:name}/{file}/pliki', [App\Http\Controllers\ClubPageController::class, 'destroyFile'])->name('clubFilesPageFile.destroyFile');
+
 
     Route::middleware(['supervisorAndChairman'])->group(function () {
     Route::get('/{club:name}/dziennik-spotkan', [App\Http\Controllers\MeetingController::class, 'index'])->name('meetings.index');
@@ -68,6 +71,9 @@ Route::middleware(['auth', 'club.access'])->group(function () {
     Route::delete('/{club:name}/dziennik-spotkan/{meeting}', [App\Http\Controllers\MeetingController::class, 'destroy'])->name('meetings.destroy');
     });
 
+
+    Route::get('/{club:name}/plany-wydatkow', [App\Http\Controllers\SpendingPlanController::class, 'menu'])->name('spendingPlan.menu');
+    Route::get('/{club:name}/plany-wydatkow/archiwum/{report}', [App\Http\Controllers\SpendingPlanController::class, 'show'])->name('spendingPlan.show');
     Route::middleware(['spendingPlan'])->group(function () {
     Route::get('/{club:name}/{report}/plan-wydatkow', [App\Http\Controllers\SpendingPlanController::class, 'edit'])->name('spendingPlan.edit');
     Route::post('/{club:name}/{report}/plan-wydatkow', [App\Http\Controllers\SpendingPlanController::class, 'store'])->name('spendingPlan.store');
@@ -86,6 +92,9 @@ Route::middleware(['auth', 'club.access'])->group(function () {
     Route::post('/{club:name}/{report}/submit', [App\Http\Controllers\ReportActionsController::class, 'submit'])->name('clubReport.submitToSupervisor');
     });
 
+
+    Route::get('/{club:name}/sprawozdania', [App\Http\Controllers\ReportController::class, 'menu'])->name('clubReport.menu');
+    Route::get('/{club:name}/sprawozdania/archiwum/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('clubReport.show');
     Route::middleware(['report'])->group(function () {
     Route::get('/{club:name}/{report}/sprawozdanie', [App\Http\Controllers\ReportController::class, 'edit'])->name('clubReport.edit');
     Route::patch('/{club:name}/{report}/sprawozdanie', [App\Http\Controllers\ReportController::class, 'update'])->name('clubReport.update');
@@ -93,6 +102,9 @@ Route::middleware(['auth', 'club.access'])->group(function () {
     Route::get('/{club:name}/{report}/sprawozdanie/generateDoc', [App\Http\Controllers\ReportController::class, 'generateDoc'])->name('clubReport.generateDoc');
     });
 
+
+    Route::get('/{club:name}/plany-dzialan', [App\Http\Controllers\ActionPlanController::class, 'menu'])->name('clubActionPlan.menu');
+    Route::get('/{club:name}/plany-dzialan/archiwum/{report}', [App\Http\Controllers\ActionPlanController::class, 'show'])->name('clubActionPlan.show');
     Route::middleware(['actionPlan'])->group(function () {
     Route::get('/{club:name}/{report}/plan-dzialan', [App\Http\Controllers\ActionPlanController::class, 'edit'])->name('clubActionPlan.edit');
     Route::patch('/{club:name}/{report}/plan-dzialan', [App\Http\Controllers\ActionPlanController::class, 'update'])->name('clubActionPlan.update');

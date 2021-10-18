@@ -12,7 +12,7 @@
                                     href="{{ route('clubMainPage', ['club' => $my_club])}}"
                                     data-lightbox="photos"><img class="img-fluid"
                                                                 src="{{ asset('storage/' . $my_club->icon) }}"></a>
-                                <a href="{{ route('clubMainPage', ['club' => $my_club])}}">{{$my_club->name}}</a>
+                                <h3><a class="font-weight-bold" href="{{ route('clubMainPage', ['club' => $my_club])}}">{{$my_club->name}}</a></h3>
                             </div>
                         @endforeach
                     </div>
@@ -27,7 +27,7 @@
                                     href="{{ route('clubMainPage', ['club' => $club])}}"
                                     data-lightbox="photos"><img class="img-fluid"
                                                                 src="{{ asset('storage/' . $club->icon) }}"></a>
-                                <a href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a>
+                                <h3><a class="font-weight-bold" href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a></h3>
                             </div>
                         @endforeach
                     </div>
@@ -42,7 +42,7 @@
                                     href="{{ route('clubMainPage', ['club' => $club])}}"
                                     data-lightbox="photos"><img class="img-fluid"
                                                                 src="{{ asset('storage/' . $club->icon) }}"></a>
-                                <a href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a>
+                                <h3><a class="font-weight-bold" href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a></h3>
                             </div>
                         @endforeach
                     </div>
