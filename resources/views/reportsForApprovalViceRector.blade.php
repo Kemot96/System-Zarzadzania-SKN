@@ -6,12 +6,13 @@
     <div class="container">
     <!-- Page Content -->
     <div id="content">
-
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
                 <td>Osoba składające sprawozdanie</td>
                 <td>Typ sprawozdania</td>
+                <td>Koło/sekcja</td>
                 <td>Załączniki</td>
                 <td colspan="2">Akcje</td>
             </tr>
@@ -21,6 +22,7 @@
                 <tr>
                     <td>{{$report->user->name}}</td>
                     <td>{{$report->type->name}}</td>
+                    <td>{{$report->club->name}}</td>
                     <td>
                         @foreach($report->attachments as $attachment)
                             <a href="{{ route('downloadAttachment', ['path' => $attachment->name])}}">{{$attachment->original_file_name}}</a>
@@ -70,7 +72,7 @@
             @endforeach
             </tbody>
         </table>
-        <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
+        </div>
     </div>
 
     <!-- Attachment Modal -->

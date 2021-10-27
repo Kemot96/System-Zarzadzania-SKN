@@ -31,6 +31,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Edytuj instytut') }}
                                 </button>
+                                <a href="{{ route('institutes.index')}}" class="btn btn-danger">Anuluj</a>
                             </div>
                         </div>
                     </form>

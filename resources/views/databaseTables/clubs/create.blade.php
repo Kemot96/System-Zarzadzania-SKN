@@ -69,6 +69,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Dodaj koło/sekcję') }}
                                 </button>
+                                <a href="{{ route('clubs.index')}}" class="btn btn-danger">Anuluj</a>
                             </div>
                         </div>
                     </form>

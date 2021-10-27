@@ -4,50 +4,50 @@
     <div class="container">
         @if (Auth::check())
             <h1 class="text-center">Moje koła/sekcje:</h1>
-            <div class="photo-gallery">
-                <div class="container">
-                    <div class="row photos">
-                        @foreach($my_clubs as $my_club)
-                            <div class="col-sm-6 col-md-4 col-lg-3 item"><a
-                                    href="{{ route('clubMainPage', ['club' => $my_club])}}"
-                                    data-lightbox="photos"><img class="img-fluid"
-                                                                src="{{ asset('storage/' . $my_club->icon) }}"></a>
-                                <h3><a class="font-weight-bold" href="{{ route('clubMainPage', ['club' => $my_club])}}">{{$my_club->name}}</a></h3>
+            <ul class="list-group">
+                @foreach($my_clubs as $my_club)
+                    <li class="list-group-item d-md-flex d-lg-flex d-xl-flex justify-content-between align-items-center">
+                        <h2><a href="{{ route('clubMainPage', ['club' => $my_club])}}">{{$my_club->name}}</a></h2>
+                        @if(!$my_club->icon == NULL)
+                            <div class="image-club">
+                                <a href="{{ route('clubMainPage', ['club' => $my_club])}}">
+                                    <img src="{{ asset('storage/' . $my_club->icon) }}" class="img-fluid img-thumbnail"
+                                         alt=""></a>
                             </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+
+
             <h1 class="text-center">Inne:</h1>
-            <div class="photo-gallery">
-                <div class="container">
-                    <div class="row photos">
-                        @foreach($clubs as $club)
-                            <div class="col-sm-6 col-md-4 col-lg-3 item"><a
-                                    href="{{ route('clubMainPage', ['club' => $club])}}"
-                                    data-lightbox="photos"><img class="img-fluid"
-                                                                src="{{ asset('storage/' . $club->icon) }}"></a>
-                                <h3><a class="font-weight-bold" href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a></h3>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+            <ul class="list-group">
+                @foreach($clubs as $club)
+                    <li class="list-group-item d-md-flex d-lg-flex d-xl-flex justify-content-between align-items-center">
+                        <h2><a href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a></h2>
+                        @if(!$club->icon == NULL)
+                        <div class="image-club">
+                            <a href="{{ route('clubMainPage', ['club' => $club])}}">
+                                <img src="{{ asset('storage/' . $club->icon) }}" class="img-fluid img-thumbnail" alt=""></a>
+                        </div>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
         @else
-            <div class="photo-gallery">
-                <div class="container">
-                    <div class="row photos">
-                        @foreach($clubs as $club)
-                            <div class="col-sm-6 col-md-4 col-lg-3 item"><a
-                                    href="{{ route('clubMainPage', ['club' => $club])}}"
-                                    data-lightbox="photos"><img class="img-fluid"
-                                                                src="{{ asset('storage/' . $club->icon) }}"></a>
-                                <h3><a class="font-weight-bold" href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a></h3>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+            <ul class="list-group">
+                @foreach($clubs as $club)
+                    <li class="list-group-item d-md-flex d-lg-flex d-xl-flex justify-content-between align-items-center">
+                        <h2><a href="{{ route('clubMainPage', ['club' => $club])}}">{{$club->name}}</a></h2>
+                        @if(!$club->icon == NULL)
+                        <div class="image-club">
+                            <a href="{{ route('clubMainPage', ['club' => $club])}}">
+                                <img src="{{ asset('storage/' . $club->icon) }}" class="img-fluid img-thumbnail" alt=""></a>
+                        </div>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
         @endif
     </div>
 @endsection

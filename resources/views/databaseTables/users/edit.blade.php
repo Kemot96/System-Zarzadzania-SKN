@@ -83,6 +83,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Edytuj uzytkownika') }}
                                 </button>
+                                <a href="{{ route('users.index')}}" class="btn btn-danger">Anuluj</a>
                             </div>
                         </div>
                     </form>
@@ -120,6 +121,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Ustaw nowe hasło uzytkownika') }}
                                 </button>
+                                <a href="{{ route('users.index')}}" class="btn btn-danger">Anuluj</a>
                             </div>
                         </div>
                     </form>

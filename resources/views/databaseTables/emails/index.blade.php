@@ -4,7 +4,7 @@
 
     <!-- Page Content -->
     <div id="content">
-
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -23,6 +23,7 @@
             @endforeach
             </tbody>
         </table>
+        </div>
         {{ $emails->links() }}
 
         @if (session('status'))
@@ -31,7 +32,6 @@
             </div>
         @endif
 
-        <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 
     </div>
 @endsection

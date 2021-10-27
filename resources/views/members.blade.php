@@ -7,7 +7,7 @@
     @if($club->getLoggedUserRoleName() == 'opiekun_koła')
         <!-- Page Content -->
         <div id="content">
-
+            <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -39,8 +39,9 @@
                 @endforeach
                 </tbody>
             </table>
-
+            </div>
             <div>Nieaktywni członkowie:</div>
+            <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -74,8 +75,10 @@
                 @endforeach
                 </tbody>
             </table>
+            </div>
 
             <div>Członkowie z wnioskiem o skreślenie:</div>
+            <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -114,11 +117,12 @@
                 @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
     @elseif($club->getLoggedUserRoleName() == 'przewodniczący_koła')
         <!-- Page Content -->
         <div id="content">
-
+            <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -152,11 +156,12 @@
                 @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
     @elseif($club->getLoggedUserRoleName() == 'członek_koła')
         <!-- Page Content -->
             <div id="content">
-
+                <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -175,6 +180,7 @@
                     @endforeach
                     </tbody>
                 </table>
+                </div>
             </div>
     @endif
 

@@ -88,6 +88,9 @@
             padding: 15px 0 15px;
         }
 
+        .image-club {
+            width: 200px;
+        }
 
     </style>
 

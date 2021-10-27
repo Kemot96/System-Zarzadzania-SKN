@@ -4,7 +4,7 @@
 
       <!-- Page Content -->
       <div id="content">
-
+          <div class="table-responsive">
           <table class="table table-striped">
               <thead>
               <tr>
@@ -34,6 +34,7 @@
               @endforeach
               </tbody>
           </table>
+          </div>
           {{ $clubs->links() }}
 
           @if (session('status'))
@@ -43,7 +44,6 @@
           @endif
 
           <a href="{{ route('clubs.create')}}" class="btn btn-success">Dodaj koło/sekcję</a>
-          <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 
       </div>
   @endsection

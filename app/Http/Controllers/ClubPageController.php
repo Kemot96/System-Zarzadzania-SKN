@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Club;
 use App\Models\ClubMember;
+use App\Models\Email;
 use App\Models\File;
 use App\Models\Report;
 use App\Models\Role;
@@ -89,17 +90,19 @@ class ClubPageController extends Controller
             'removal_request' => FALSE,
         ]);
 
-        $supervisor = getClubSupervisor($club);
-        if ($supervisor) {
-            $supervisor->notify(new RequestToJoinClub());
+
+        if(Email::latest()->where('type', 'request_to_join_club')->value('enable_sending'))
+        {
+            $supervisor = getClubSupervisor($club);
+            if ($supervisor) {
+                $supervisor->notify(new RequestToJoinClub());
+            }
+
+            $chairman = getClubChairman($club);
+            if ($chairman) {
+                $chairman->notify(new RequestToJoinClub());
+            }
         }
-
-        $chairman = getClubChairman($club);
-        if ($chairman) {
-            $chairman->notify(new RequestToJoinClub());
-        }
-
-
         return back();
     }
 

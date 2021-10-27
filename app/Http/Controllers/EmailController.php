@@ -72,12 +72,19 @@ class EmailController extends Controller
      */
     public function update(Request $request, Email $email)
     {
-        $this->validateUpdateEmail();
+        //dd($request);
+        //$this->validateUpdateEmail();
 
         $email->update(array(
             'message' => $request['message'],
+            'day' => $request['day'],
+            'day2' => $request['day2'],
+            'month' => $request['month'],
+            'month2'=> $request['month2'],
+            'enable_sending' => $request['enable_sending'],
+            'send_on_schedule' => $request['send_on_schedule'],
+            'send_on_schedule2' => $request['send_on_schedule2'],
         ));
-
 
         return redirect()->route('emails.index')->with('status', 'Zmodyfikowano treść emaila!');
     }

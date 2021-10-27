@@ -4,7 +4,7 @@
 
     <!-- Page Content -->
     <div id="content">
-
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -65,6 +65,7 @@
             @endforeach
             </tbody>
         </table>
+        </div>
         {{ $club_members->links() }}
 
         @if (session('status'))
@@ -74,9 +75,8 @@
         @endif
 
         <a href="{{ route('clubMembers.create', [$club, $academicYear])}}" class="btn btn-success">Dodaj członka koła/sekcji</a>
-        <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
-        <a href="{{ route('clubMembers.generatePDF', [$club, $academicYear])}}" class="btn btn-success">Wygeneruj raport członkostwa (PDF)</a>
-        <a href="{{ route('clubMembers.generateDoc', [$club, $academicYear])}}" class="btn btn-success">Wygeneruj raport członkostwa (Doc)</a>
+        <a href="{{ route('clubMembers.generatePDF', [$club, $academicYear])}}" class="btn btn-primary">Wygeneruj raport członkostwa (PDF)</a>
+        <a href="{{ route('clubMembers.generateDoc', [$club, $academicYear])}}" class="btn btn-primary">Wygeneruj raport członkostwa (Doc)</a>
     </div>
 @endsection
 

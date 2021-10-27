@@ -12,5 +12,12 @@ class Email extends Model
     protected $fillable = [
         'type',
         'message',
+        'day',
+        'day2',
+        'month',
+        'month2',
+        'enable_sending',
+        'send_on_schedule',
+        'send_on_schedule2',
     ];
 }

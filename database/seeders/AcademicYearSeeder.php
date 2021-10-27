@@ -16,7 +16,8 @@ class AcademicYearSeeder extends Seeder
     {
         DB::table('academic_years')->insert([
             ['name' => "2019/2020", 'current_year' => '0' ,'created_at' => now(), 'updated_at' => now()],
-            ['name' => "2020/2021", 'current_year' => '1' ,'created_at' => now(), 'updated_at' => now()],
+            ['name' => "2020/2021", 'current_year' => '0' ,'created_at' => now(), 'updated_at' => now()],
+            ['name' => "2021/2022", 'current_year' => '1' ,'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

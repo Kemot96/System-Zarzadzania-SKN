@@ -4,7 +4,7 @@
 
     <!-- Page Content -->
     <div id="content">
-
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -30,6 +30,7 @@
             @endforeach
             </tbody>
         </table>
+        </div>
         {{ $institutes->links() }}
 
         @if (session('status'))
@@ -39,7 +40,6 @@
         @endif
 
         <a href="{{ route('institutes.create')}}" class="btn btn-success">Dodaj instytut</a>
-        <a href="{{ url('/') }}" class="btn btn-success">Powrót na stronę główną</a>
 
     </div>
 @endsection

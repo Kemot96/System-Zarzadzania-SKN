@@ -14,7 +14,6 @@ class ClubMemberSeeder extends Seeder
      */
     public function run()
     {
-        //TODO nie pozwalaj na wszystkie kombinacje id-ków
         for ($i = 1; $i <= 20; $i++) {
             $random_users_id = DB::table('users') -> inRandomOrder() -> value('id');
             $random_roles_id = DB::table('roles') -> where('special_role', FALSE) -> inRandomOrder() -> value('id');

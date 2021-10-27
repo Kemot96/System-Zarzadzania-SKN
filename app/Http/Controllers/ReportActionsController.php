@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attachment;
 use App\Models\Club;
+use App\Models\Email;
 use App\Models\File;
 use App\Models\Report;
 use App\Models\Role;
@@ -35,19 +36,23 @@ class ReportActionsController extends Controller
                     'supervisor_approved' => true,
                 ));
 
-                $secretariat_id = Role::where('name', 'sekretariat_prorektora')->value('id');
-                $secretariat_users = User::where('roles_id', $secretariat_id)->get();
-                foreach ($secretariat_users as $secretariat) {
-                    $secretariat->notify(new SubmitReport());
+                if (Email::latest()->where('type', 'report_submitted')->value('enable_sending')) {
+                    $secretariat_id = Role::where('name', 'sekretariat_prorektora')->value('id');
+                    $secretariat_users = User::where('roles_id', $secretariat_id)->get();
+                    foreach ($secretariat_users as $secretariat) {
+                        $secretariat->notify(new SubmitReport());
+                    }
                 }
             } else {
                 $report->update(array(
                     'users_id' => Auth::user()->id,
                 ));
 
-                $supervisor = getClubSupervisor($club);
-                if ($supervisor) {
-                    $supervisor->notify(new SubmitReport());
+                if (Email::latest()->where('type', 'report_submitted')->value('enable_sending')) {
+                    $supervisor = getClubSupervisor($club);
+                    if ($supervisor) {
+                        $supervisor->notify(new SubmitReport());
+                    }
                 }
             }
 
@@ -111,11 +116,15 @@ class ReportActionsController extends Controller
                 'supervisor_approved' => true,
             ));
 
-            $secretariat_id = Role::where('name', 'sekretariat_prorektora')->value('id');
-            $secretariat_users = User::where('roles_id', $secretariat_id)->get();
-            foreach ($secretariat_users as $secretariat) {
-                $secretariat->notify(new SubmitReport());
+            if (Email::latest()->where('type', 'report_submitted')->value('enable_sending'))
+            {
+                $secretariat_id = Role::where('name', 'sekretariat_prorektora')->value('id');
+                $secretariat_users = User::where('roles_id', $secretariat_id)->get();
+                foreach ($secretariat_users as $secretariat) {
+                    $secretariat->notify(new SubmitReport());
+                }
             }
+
         } else if ($request->action == "dismiss") {
             $this->validateReportRemarks();
 
@@ -124,10 +133,13 @@ class ReportActionsController extends Controller
                 'supervisor_approved' => false,
             ));
 
-            $chairman = getClubChairman($club);
-            if ($chairman) {
-                $chairman->notify(new DismissReport());
+            if (Email::latest()->where('type', 'report_dismissed')->value('enable_sending')){
+                $chairman = getClubChairman($club);
+                if ($chairman) {
+                    $chairman->notify(new DismissReport());
+                }
             }
+
 
         } else if ($request->action == "undo") {
             $report->update(array(
@@ -147,11 +159,14 @@ class ReportActionsController extends Controller
                 'secretariat_approved' => true,
             ));
 
-            $vice_rector_id = Role::where('name', 'prorektor')->value('id');
-            $vice_rector_users = User::where('roles_id', $vice_rector_id)->get();
-            foreach ($vice_rector_users as $vice_rector) {
-                $vice_rector->notify(new SubmitReport());
+            if (Email::latest()->where('type', 'report_submitted')->value('enable_sending')){
+                $vice_rector_id = Role::where('name', 'prorektor')->value('id');
+                $vice_rector_users = User::where('roles_id', $vice_rector_id)->get();
+                foreach ($vice_rector_users as $vice_rector) {
+                    $vice_rector->notify(new SubmitReport());
+                }
             }
+
         } else if ($request->action == "dismiss") {
             $this->validateReportRemarks();
 
@@ -160,16 +175,18 @@ class ReportActionsController extends Controller
                 'secretariat_approved' => false,
             ));
 
-            $club = Club::where('id', $report->clubs_id)->first();
+            if (Email::latest()->where('type', 'report_dismissed')->value('enable_sending')){
+                $club = Club::where('id', $report->clubs_id)->first();
 
-            $chairman = getClubChairman($club);
-            if ($chairman) {
-                $chairman->notify(new DismissReport());
-            }
+                $chairman = getClubChairman($club);
+                if ($chairman) {
+                    $chairman->notify(new DismissReport());
+                }
 
-            $supervisor = getClubSupervisor($club);
-            if ($supervisor) {
-                $supervisor->notify(new DismissReport());
+                $supervisor = getClubSupervisor($club);
+                if ($supervisor) {
+                    $supervisor->notify(new DismissReport());
+                }
             }
 
         } else if ($request->action == "undo") {
@@ -197,18 +214,22 @@ class ReportActionsController extends Controller
                 'vice-rector_approved' => false,
             ));
 
-            $club = Club::where('id', $report->clubs_id)->first();
+            if (Email::latest()->where('type', 'report_dismissed')->value('enable_sending')){
+                $club = Club::where('id', $report->clubs_id)->first();
 
-            $chairman = getClubChairman($club);
-            if ($chairman) {
-                $chairman->notify(new DismissReport());
+                $chairman = getClubChairman($club);
+                if ($chairman) {
+                    $chairman->notify(new DismissReport());
+                }
+
+
+                $supervisor = getClubSupervisor($club);
+                if ($supervisor) {
+                    $supervisor->notify(new DismissReport());
+                }
             }
 
 
-            $supervisor = getClubSupervisor($club);
-            if ($supervisor) {
-                $supervisor->notify(new DismissReport());
-            }
 
         } else if ($request->action == "undo") {
             $report->update(array(

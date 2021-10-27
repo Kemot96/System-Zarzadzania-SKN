@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Club;
 use App\Models\ClubMember;
+use App\Models\Email;
 use App\Models\Notification;
 use App\Models\Role;
 use App\Notifications\RemoveClubMemberRequest;
@@ -132,10 +133,13 @@ class ListOfClubMembersController extends Controller
                 'reason_to_removal' => $request["modal-input-reason"],
             ));
 
-            $supervisor = getClubSupervisor($club);
-            if($supervisor)
+            if(Email::latest()->where('type', 'remove_club_member_request')->value('enable_sending'))
             {
-                $supervisor->notify(new RemoveClubMemberRequest());
+                $supervisor = getClubSupervisor($club);
+                if($supervisor)
+                {
+                    $supervisor->notify(new RemoveClubMemberRequest());
+                }
             }
         }
         elseif($request -> action == "undoRemoveRequest")

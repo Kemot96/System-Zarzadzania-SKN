@@ -59,6 +59,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Edytuj członka koła/sekcji') }}
                                 </button>
+                                <a href="{{ route('clubMembers.index')}}" class="btn btn-danger">Anuluj</a>
                             </div>
                         </div>
                     </form>

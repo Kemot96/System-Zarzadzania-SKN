@@ -17,6 +17,13 @@ class CreateEmailsTable extends Migration
             $table->id();
             $table->string('type')->unique();
             $table->text('message');
+            $table->integer('day') ->nullable();
+            $table->integer('month')->nullable();
+            $table->integer('day2') ->nullable();
+            $table->integer('month2')->nullable();
+            $table->boolean('enable_sending');
+            $table->boolean('send_on_schedule')->nullable();;
+            $table->boolean('send_on_schedule2')->nullable();;
             $table->timestamps();
         });
     }

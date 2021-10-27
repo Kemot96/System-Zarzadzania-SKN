@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Models\AcademicYear;
 use App\Models\ClubMember;
+use App\Models\Email;
 use App\Models\File;
 use App\Models\Report;
 use App\Models\Club;
@@ -41,7 +42,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            $files_size_limit_for_club = 2; //size in MB
+            $files_size_limit_for_club = 10240; //size in MB (10 MB)
             $clubs = Club::all();
 
             foreach ($clubs as $club) {
@@ -68,7 +69,7 @@ class Kernel extends ConsoleKernel
                     $oldest_file->delete();
                 }
             }
-        })->everyMinute();
+        })->daily();
 
 
 
@@ -154,36 +155,72 @@ class Kernel extends ConsoleKernel
             }
         })->yearlyOn(9, 15, '10:00');
 
-        $schedule->call(function () {
-            $users = getActiveChairmenAndSupervisors();
-            Notification::send($users, new ReportReminder());
+        if(Email::latest()->where('type', 'report_reminder')->value('enable_sending'))
+        {
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new ReportReminder());
+            })->yearlyOn(Email::latest()->where('type', 'report_reminder')->value('month'), Email::latest()->where('type', 'spending_plan_reminder')->value('day'), '10:00');
 
-        })->yearlyOn(6, 15, '10:00');
-
-        $schedule->call(function () {
-            $users = getActiveChairmenAndSupervisors();
-            Notification::send($users, new ActionPlanReminder());
-            Notification::send($users, new SpendingPlanDemandReminder());
-            Notification::send($users, new NewAcademicYearAcceptanceOfMembers());
-
-        })->yearlyOn(10, 30, '10:00');
-
-        $schedule->call(function () {
-
-            $users = getActiveChairmenAndSupervisors();
-            Notification::send($users, new SpendingPlanReminder());
-
-        })->yearlyOn(11, 15, '10:00');
-
-        $schedule->call(function () {
-
-            $users = getActiveChairmenAndSupervisors();
-            Notification::send($users, new SpendingPlanDemandReminder());
-
-        })->yearlyOn(4, 30, '10:00');
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new ReportReminder());
+            })->yearlyOn(Email::latest()->where('type', 'report_reminder')->value('month2'), Email::latest()->where('type', 'spending_plan_reminder')->value('day2'), '10:00');
+        }
 
 
+        if(Email::latest()->where('type', 'action_plan_reminder')->value('enable_sending'))
+        {
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new ActionPlanReminder());
+            })->yearlyOn(Email::latest()->where('type', 'action_plan_reminder')->value('month'), Email::latest()->where('type', 'spending_plan_reminder')->value('day'), '10:00');
 
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new ActionPlanReminder());
+            })->yearlyOn(Email::latest()->where('type', 'action_plan_reminder')->value('month2'), Email::latest()->where('type', 'spending_plan_reminder')->value('day2'), '10:00');
+        }
+
+        if(Email::latest()->where('type', 'new_academic_year_acceptance_of_members')->value('enable_sending'))
+        {
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new NewAcademicYearAcceptanceOfMembers());
+            })->yearlyOn(Email::latest()->where('type', 'new_academic_year_acceptance_of_members')->value('month'), Email::latest()->where('type', 'spending_plan_reminder')->value('day'), '10:00');
+
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new NewAcademicYearAcceptanceOfMembers());
+            })->yearlyOn(Email::latest()->where('type', 'new_academic_year_acceptance_of_members')->value('month2'), Email::latest()->where('type', 'spending_plan_reminder')->value('day2'), '10:00');
+        }
+
+
+        if(Email::latest()->where('type', 'spending_plan_reminder')->value('enable_sending'))
+        {
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new SpendingPlanReminder());
+            })->yearlyOn(Email::latest()->where('type', 'spending_plan_reminder')->value('month'), Email::latest()->where('type', 'spending_plan_reminder')->value('day'), '10:00');
+
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new SpendingPlanReminder());
+            })->yearlyOn(Email::latest()->where('type', 'spending_plan_reminder')->value('month2'), Email::latest()->where('type', 'spending_plan_reminder')->value('day2'), '10:00');
+        }
+
+        if(Email::latest()->where('type', 'spending_plan_demand_reminder')->value('enable_sending'))
+        {
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new SpendingPlanDemandReminder());
+            })->yearlyOn(Email::latest()->where('type', 'spending_plan_demand_reminder')->value('month'), Email::latest()->where('type', 'spending_plan_reminder')->value('day'), '10:00');
+
+            $schedule->call(function () {
+                $users = getActiveChairmenAndSupervisors();
+                Notification::send($users, new SpendingPlanDemandReminder());
+            })->yearlyOn(Email::latest()->where('type', 'spending_plan_demand_reminder')->value('month2'), Email::latest()->where('type', 'spending_plan_reminder')->value('day2'), '10:00');
+        }
     }
 
     /**

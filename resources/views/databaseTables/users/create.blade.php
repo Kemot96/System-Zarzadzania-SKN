@@ -104,6 +104,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Dodaj uzytkownika') }}
                                 </button>
+                                <a href="{{ route('users.index')}}" class="btn btn-danger">Anuluj</a>
                             </div>
                         </div>
                     </form>
